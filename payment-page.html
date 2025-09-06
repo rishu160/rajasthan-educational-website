@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Payment - Rajasthan Digital Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="rajasthan-style.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fas fa-graduation-cap"></i> Course Enrollment Payment</h3>
+                </div>
+                <div class="card-body">
+                    <div id="course-details" class="mb-4">
+                        <h5>Course Details</h5>
+                        <div class="course-info p-3 bg-light rounded">
+                            <h6 id="course-name">Computer Science Engineering</h6>
+                            <p id="course-description">Complete 4-year B.Tech program with modern curriculum</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Duration:</strong> <span id="course-duration">4 Years</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Fee:</strong> <span id="course-fee" class="text-success">₹50,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-options mb-4">
+                        <h5>Payment Options</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card border-primary">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-credit-card fa-2x text-primary mb-2"></i>
+                                        <h6>Full Payment</h6>
+                                        <p class="text-success">₹50,000</p>
+                                        <small>Save 10% on full payment</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
+                                        <h6>Semester Wise</h6>
+                                        <p class="text-warning">₹7,000/sem</p>
+                                        <small>Pay per semester</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar fa-2x text-info mb-2"></i>
+                                        <h6>Monthly EMI</h6>
+                                        <p class="text-info">₹1,200/month</p>
+                                        <small>48 months EMI</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="student-details mb-4">
+                        <h5>Student Details</h5>
+                        <form id="student-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="studentName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="studentEmail" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" name="studentPhone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">College</label>
+                                    <select class="form-select" name="college" required>
+                                        <option value="">Select College</option>
+                                        <option value="jaipur">Government College, Jaipur</option>
+                                        <option value="udaipur">Maharana Pratap College, Udaipur</option>
+                                        <option value="bikaner">Rajasthan Agriculture College, Bikaner</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="payment-summary mb-4">
+                        <h5>Payment Summary</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td>Course Fee</td>
+                                    <td class="text-end">₹50,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Registration Fee</td>
+                                    <td class="text-end">₹1,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Discount (Government Scheme)</td>
+                                    <td class="text-end text-success">-₹5,000</td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td><strong>Total Amount</strong></td>
+                                    <td class="text-end"><strong>₹46,000</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-success btn-lg" onclick="initiatePayment()">
+                            <i class="fas fa-lock"></i> Pay Securely ₹46,000
+                        </button>
+                        <p class="mt-2 text-muted">
+                            <i class="fas fa-shield-alt"></i> Secured by Razorpay | 
+                            <i class="fas fa-university"></i> Government of Rajasthan
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/payment.js"></script>
+
+<script>
+async function initiatePayment() {
+    const courseData = {
+        id: 'computer-science',
+        name: 'Computer Science Engineering',
+        price: 46000
+    };
+
+    try {
+        const result = await paymentGateway.enrollInCourse(courseData.id, courseData.price);
+        if (result.success) {
+            alert('Payment successful! You are now enrolled in the course.');
+            window.location.href = 'dashboard.html';
+        } else {
+            alert('Payment failed: ' + result.error);
+        }
+    } catch (error) {
+        alert('Payment error: ' + error.message);
+    }
+}
+
+// Load student details if logged in
+document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.name) {
+        document.querySelector('input[name="studentName"]').value = user.name;
+        document.querySelector('input[name="studentEmail"]').value = user.email;
+    }
+});
+</script>
+
+</body>
+</html>

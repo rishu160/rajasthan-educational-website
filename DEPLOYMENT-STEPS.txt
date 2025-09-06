@@ -1,0 +1,83 @@
+RAJASTHAN DIGITAL EDUCATION PLATFORM
+GOOGLE FIREBASE DEPLOYMENT GUIDE
+
+===========================================
+OPTION 1: ONE-CLICK DEPLOYMENT
+===========================================
+
+1. Double-click on "QUICK-DEPLOY.bat" file
+2. Follow the prompts
+3. Website will be live in 5 minutes!
+
+===========================================
+OPTION 2: MANUAL DEPLOYMENT
+===========================================
+
+Step 1: Open Command Prompt (CMD)
+- Press Windows + R
+- Type "cmd" and press Enter
+
+Step 2: Navigate to project folder
+cd "C:\Users\HP\Desktop\education website\LearnEd_E-learning_Website"
+
+Step 3: Install Firebase CLI
+npm install -g firebase-tools
+
+Step 4: Login to Firebase
+firebase login
+(This will open browser - login with Google account)
+
+Step 5: Initialize Firebase
+firebase init
+- Select: Hosting, Functions, Firestore
+- Choose: Create new project
+- Project name: rajasthan-education-platform
+- Public directory: . (current directory)
+- Single page app: No
+
+Step 6: Deploy to Firebase
+firebase deploy
+
+===========================================
+OPTION 3: GITHUB PAGES (ALTERNATIVE)
+===========================================
+
+1. Go to https://github.com
+2. Create new repository: "rajasthan-education-website"
+3. Upload all files from this folder
+4. Go to Settings > Pages
+5. Select source: Deploy from branch
+6. Branch: main
+7. Website will be live at: https://yourusername.github.io/rajasthan-education-website
+
+===========================================
+AFTER DEPLOYMENT
+===========================================
+
+Your website will be available at:
+- Firebase: https://rajasthan-education-platform.web.app
+- GitHub: https://yourusername.github.io/rajasthan-education-website
+
+Features that will work:
+✓ Complete website with all pages
+✓ AI Chatbot (Hindi/English + Voice)
+✓ Search functionality
+✓ Payment gateway integration
+✓ Admin dashboard
+✓ Mobile responsive design
+✓ PWA support
+
+===========================================
+TROUBLESHOOTING
+===========================================
+
+If deployment fails:
+1. Make sure Node.js is installed
+2. Check internet connection
+3. Try running commands as Administrator
+4. Contact support: 1800-180-6127
+
+===========================================
+GOVERNMENT OF RAJASTHAN
+DIGITAL EDUCATION INITIATIVE
+===========================================
