@@ -282,3 +282,44 @@ footer {
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+/* Navigation Button Fixes */
+.navbar .d-flex a, .navbar .d-flex button {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.navbar .btn {
+    white-space: nowrap;
+    min-width: auto;
+}
+
+/* Ensure App button is always visible */
+.navbar a[href="mobile-app.html"] {
+    display: inline-block !important;
+    visibility: visible !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.navbar a[href="mobile-app.html"]:hover {
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 991px) {
+    .navbar-collapse .d-flex {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        margin-top: 15px;
+    }
+    
+    .navbar-collapse .d-flex .btn {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
