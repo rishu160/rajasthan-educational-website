@@ -33,6 +33,35 @@
 	<link rel="manifest" href="manifest.json">
 	<meta name="theme-color" content="#FF6B35">
 	
+	<style>
+	/* Force App Button Visibility */
+	a[href="mobile-app.html"] {
+		display: inline-block !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		background: #28a745 !important;
+		color: white !important;
+		padding: 8px 16px !important;
+		border-radius: 5px !important;
+		text-decoration: none !important;
+		font-size: 14px !important;
+		position: relative !important;
+		z-index: 9999 !important;
+	}
+	
+	.navbar .d-flex, .navbar div[style*="display: flex"] {
+		display: flex !important;
+		align-items: center !important;
+		gap: 10px !important;
+	}
+	
+	@media (max-width: 960px) {
+		nav ul, .srch, .get-started {
+			display: none !important;
+		}
+	}
+	</style>
+	
 	<!-- Structured Data for SEO -->
 	<script type="application/ld+json">
 	{
@@ -105,19 +134,8 @@
 				<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
 			</ul>
 			
-			<div class="d-flex align-items-center">
-				<!-- Search Bar -->
-				<div class="search-container me-3">
-					<div class="input-group">
-						<input type="text" id="search-input" class="form-control" placeholder="Search courses, colleges..." style="width: 200px;">
-						<button class="btn btn-primary" type="button" onclick="performSearch()">
-							<i class="fas fa-search"></i>
-						</button>
-					</div>
-					<div id="search-results" class="search-results"></div>
-				</div>
-				
-				<div class="dropdown me-3">
+			<div class="d-flex align-items-center gap-2">
+				<div class="dropdown">
 					<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 						<i class="fas fa-plus me-1"></i>Quick Actions
 					</button>
@@ -131,7 +149,7 @@
 				</div>
 				<div id="user-menu" style="display: none;"></div>
 				<a id="login-btn" class="btn btn-primary" href="#" onclick="showLoginModal()">Login</a>
-				<a href="mobile-app.html" class="btn btn-outline-primary ms-2">
+				<a href="mobile-app.html" class="btn btn-success">
 					<i class="fas fa-mobile-alt"></i> App
 				</a>
 			</div>
