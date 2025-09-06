@@ -134,10 +134,10 @@
                             </div>
                             
                             <div class="d-flex gap-3">
-                                <button type="submit" class="btn btn-success btn-lg">
-                                    <i class="fas fa-video me-2"></i>Start Live Class Now
+                                <button type="submit" class="btn btn-success btn-lg" id="startGoogleMeet">
+                                    <i class="fab fa-google me-2"></i>Start Google Meet Class
                                 </button>
-                                <button type="button" class="btn btn-primary btn-lg">
+                                <button type="button" class="btn btn-primary btn-lg" id="scheduleClass">
                                     <i class="fas fa-clock me-2"></i>Schedule for Later
                                 </button>
                             </div>
@@ -194,29 +194,99 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Google Meet Integration
+function startGoogleMeet() {
+    const classTitle = document.querySelector('input[placeholder*="Mathematics"]').value || 'Live Class';
+    const subject = document.querySelector('select').value || 'General';
+    
+    // Generate Google Meet URL
+    const meetUrl = 'https://meet.google.com/new';
+    
+    // Show confirmation modal
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+        <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title"><i class="fab fa-google me-2"></i>Starting Google Meet Class</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fab fa-google fa-4x text-success mb-3"></i>
+                        <h5>Class: ${classTitle}</h5>
+                        <p class="text-muted">Subject: ${subject.charAt(0).toUpperCase() + subject.slice(1)}</p>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Instructions:</strong><br>
+                            1. Google Meet will open in a new tab<br>
+                            2. Share the meeting link with your students<br>
+                            3. Start your class when students join
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-success btn-lg" onclick="openGoogleMeet()">
+                                <i class="fab fa-google me-2"></i>Open Google Meet Now
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function openGoogleMeet() {
+    // Open Google Meet in new tab
+    window.open('https://meet.google.com/new', '_blank');
+    
+    // Close modal and show success message
+    document.querySelector('.modal').remove();
+    
+    // Show success notification
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+            <i class="fab fa-google me-2"></i>
+            <strong>Google Meet Opened!</strong> Share the meeting link with your students.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    // Auto remove notification after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Event Listeners
 document.getElementById('liveClassForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    // Simulate starting live class
+    startGoogleMeet();
+});
+
+document.getElementById('scheduleClass').addEventListener('click', function() {
     const modal = document.createElement('div');
     modal.innerHTML = `
         <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title">Live Class Started!</h5>
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Class Scheduled</h5>
                     </div>
                     <div class="modal-body text-center">
-                        <i class="fas fa-video fa-3x text-success mb-3"></i>
-                        <h5>Your live class is now broadcasting</h5>
-                        <p>Students can join using the class link</p>
-                        <div class="alert alert-info">
-                            <strong>Class Link:</strong> https://rajasthanedu.gov.in/live/class-12345
-                        </div>
+                        <i class="fas fa-calendar-check fa-3x text-primary mb-3"></i>
+                        <h5>Class scheduled successfully!</h5>
+                        <p>Students will receive notification before the class starts.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" onclick="this.closest('.modal').remove()">
-                            Continue to Class Room
+                        <button type="button" class="btn btn-primary" onclick="this.closest('.modal').remove()">
+                            OK
                         </button>
                     </div>
                 </div>
