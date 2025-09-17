@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Learning - Rajasthan Digital Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .offline-card { border-left: 4px solid #28a745; }
+        .online-card { border-left: 4px solid #007bff; }
+        .storage-bar { height: 10px; border-radius: 5px; }
+        .lecture-item { cursor: pointer; transition: all 0.3s; }
+        .lecture-item:hover { background: #f8f9fa; }
+        .download-progress { display: none; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <i class="fas fa-arrow-left me-2"></i>Rajasthan Digital Education
+        </a>
+        <div class="navbar-nav ms-auto">
+            <span class="nav-link" id="connection-status">
+                <i class="fas fa-wifi text-success"></i> Online
+            </span>
+        </div>
+    </div>
+</nav>
+
+<section class="py-4" style="margin-top: 60px;">
+    <div class="container">
+        <!-- Connection Status & Storage Info -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card offline-card">
+                    <div class="card-body">
+                        <h5><i class="fas fa-download me-2"></i>Offline Content</h5>
+                        <p class="mb-1">Downloaded Lectures: <span id="offline-count">0</span></p>
+                        <p class="mb-0">Total Size: <span id="offline-size">0 MB</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card online-card">
+                    <div class="card-body">
+                        <h5><i class="fas fa-cloud me-2"></i>Storage Status</h5>
+                        <div class="storage-bar bg-light mb-2">
+                            <div class="bg-primary h-100" id="storage-used" style="width: 0%"></div>
+                        </div>
+                        <p class="mb-0"><span id="storage-info">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto-Download Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-cog me-2"></i>Auto-Download Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="auto-download" checked>
+                            <label class="form-check-label" for="auto-download">
+                                Auto-download missed classes
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="wifi-only" checked>
+                            <label class="form-check-label" for="wifi-only">
+                                Download only on WiFi
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label class="form-label">Video Quality (to save data)</label>
+                    <select class="form-select" id="video-quality">
+                        <option value="low">Low (5-10 MB) - For Jio Phone</option>
+                        <option value="medium" selected>Medium (15-25 MB)</option>
+                        <option value="high">High (30-50 MB)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available for Download -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-cloud-download-alt me-2"></i>Available for Download</h5>
+                <button class="btn btn-sm btn-primary" onclick="refreshAvailableContent()">
+                    <i class="fas fa-refresh"></i> Refresh
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="available-content">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading content...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Downloaded Content -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-mobile-alt me-2"></i>Downloaded Content</h5>
+                <button class="btn btn-sm btn-danger" onclick="cleanOldContent()">
+                    <i class="fas fa-trash"></i> Clean Old Content
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="downloaded-content">
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-download fa-3x mb-3"></i>
+                        <p>No offline content found</p>
+                        <p>Download lectures from above</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Download Progress Modal -->
+<div class="modal fade" id="downloadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Downloading...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span id="download-title">Lecture downloading</span>
+                        <span id="download-percent">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="download-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <p class="text-muted mb-0">Please wait, this may take a few minutes...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/offline-sync.js"></script>
+<script>
+// Offline Learning Page Controller
+class OfflineLearningPage {
+    constructor() {
+        this.init();
+    }
+
+    async init() {
+        await this.updateConnectionStatus();
+        await this.updateStorageInfo();
+        await this.loadAvailableContent();
+        await this.loadDownloadedContent();
+        this.setupEventListeners();
+        
+        // Update every 30 seconds
+        setInterval(() => {
+            this.updateConnectionStatus();
+            this.updateStorageInfo();
+        }, 30000);
+    }
+
+    setupEventListeners() {
+        // Connection status updates
+        window.addEventListener('online', () => this.updateConnectionStatus());
+        window.addEventListener('offline', () => this.updateConnectionStatus());
+        
+        // Auto-download settings
+        document.getElementById('auto-download').addEventListener('change', (e) => {
+            localStorage.setItem('autoDownload', e.target.checked);
+        });
+        
+        document.getElementById('wifi-only').addEventListener('change', (e) => {
+            localStorage.setItem('wifiOnly', e.target.checked);
+        });
+        
+        document.getElementById('video-quality').addEventListener('change', (e) => {
+            localStorage.setItem('videoQuality', e.target.value);
+        });
+    }
+
+    updateConnectionStatus() {
+        const statusEl = document.getElementById('connection-status');
+        if (navigator.onLine) {
+            statusEl.innerHTML = '<i class="fas fa-wifi text-success"></i> Online';
+        } else {
+            statusEl.innerHTML = '<i class="fas fa-wifi-slash text-danger"></i> Offline';
+        }
+    }
+
+    async updateStorageInfo() {
+        try {
+            const usage = await offlineSync.getStorageUsage();
+            if (usage) {
+                const usedPercent = (usage.used / usage.available) * 100;
+                document.getElementById('storage-used').style.width = usedPercent + '%';
+                document.getElementById('storage-info').textContent = 
+                    `${usage.usedMB} MB / ${usage.availableMB} MB used`;
+            }
+            
+            // Update offline content stats
+            const lectures = await offlineSync.getOfflineLectures();
+            document.getElementById('offline-count').textContent = lectures.length;
+            
+            const totalSize = lectures.reduce((sum, lecture) => sum + (lecture.size || 0), 0);
+            document.getElementById('offline-size').textContent = Math.round(totalSize / 1024 / 1024) + ' MB';
+            
+        } catch (error) {
+            console.error('Error updating storage info:', error);
+        }
+    }
+
+    async loadAvailableContent() {
+        const container = document.getElementById('available-content');
+        
+        if (!navigator.onLine) {
+            container.innerHTML = `
+                <div class="text-center py-4 text-muted">
+                    <i class="fas fa-wifi-slash fa-3x mb-3"></i>
+                    <p>Internet connection required to see new content</p>
+                </div>
+            `;
+            return;
+        }
+
+        try {
+            // Mock data - replace with actual API call
+            const availableContent = [
+                {
+                    id: 'lec001',
+                    title: 'Computer Science - Data Structures',
+                    course: 'B.Tech CSE',
+                    duration: '45 minutes',
+                    size: '15 MB',
+                    date: '2024-01-15'
+                },
+                {
+                    id: 'lec002', 
+                    title: 'Mathematics - Calculus Basics',
+                    course: 'B.Sc Math',
+                    duration: '50 minutes',
+                    size: '18 MB',
+                    date: '2024-01-14'
+                },
+                {
+                    id: 'lec003',
+                    title: 'Agriculture Science - Crop Management',
+                    course: 'B.Sc Agriculture',
+                    duration: '40 minutes',
+                    size: '12 MB',
+                    date: '2024-01-13'
+                }
+            ];
+
+            container.innerHTML = availableContent.map(content => `
+                <div class="lecture-item border rounded p-3 mb-2" onclick="downloadLecture('${content.id}')">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${content.title}</h6>
+                            <p class="text-muted mb-1">${content.course} • ${content.duration}</p>
+                            <small class="text-muted">${content.date}</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-info">${content.size}</span>
+                            <br>
+                            <button class="btn btn-sm btn-success mt-1">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="alert alert-danger">
+                    Error loading content: ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    async loadDownloadedContent() {
+        const container = document.getElementById('downloaded-content');
+        
+        try {
+            const lectures = await offlineSync.getOfflineLectures();
+            
+            if (lectures.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-download fa-3x mb-3"></i>
+                        <p>No offline content found</p>
+                        <p>Download lectures from above</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = lectures.map(lecture => `
+                <div class="lecture-item border rounded p-3 mb-2" onclick="playOfflineLecture('${lecture.id}')">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">
+                                ${lecture.title}
+                                ${lecture.watched ? '<i class="fas fa-check-circle text-success ms-1"></i>' : ''}
+                            </h6>
+                            <p class="text-muted mb-1">Duration: ${lecture.duration}</p>
+                            <small class="text-muted">Downloaded: ${new Date(lecture.downloadDate).toLocaleDateString()}</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-secondary">${Math.round(lecture.size / 1024 / 1024)} MB</span>
+                            <br>
+                            <button class="btn btn-sm btn-primary mt-1">
+                                <i class="fas fa-play"></i> Play
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="alert alert-danger">
+                    Error loading offline content: ${error.message}
+                </div>
+            `;
+        }
+    }
+}
+
+// Global functions
+window.downloadLecture = async function(lectureId) {
+    const modal = new bootstrap.Modal(document.getElementById('downloadModal'));
+    modal.show();
+    
+    // Mock download process
+    const progressBar = document.getElementById('download-progress');
+    const progressText = document.getElementById('download-percent');
+    
+    for (let i = 0; i <= 100; i += 10) {
+        progressBar.style.width = i + '%';
+        progressText.textContent = i + '%';
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+    
+    modal.hide();
+    
+    // Simulate successful download
+    setTimeout(() => {
+        alert('Lecture downloaded successfully!');
+        // Reload downloaded content
+        offlinePage.loadDownloadedContent();
+        offlinePage.updateStorageInfo();
+    }, 500);
+};
+
+window.playOfflineLecture = function(lectureId) {
+    alert('Playing offline lecture: ' + lectureId);
+};
+
+window.refreshAvailableContent = function() {
+    offlinePage.loadAvailableContent();
+};
+
+window.cleanOldContent = async function() {
+    if (confirm('Delete content older than 30 days?')) {
+        alert('Old content cleaned successfully');
+        offlinePage.loadDownloadedContent();
+        offlinePage.updateStorageInfo();
+    }
+};
+
+// Initialize page
+const offlinePage = new OfflineLearningPage();
+</script>
+
+</body>
+</html>
