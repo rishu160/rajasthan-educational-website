@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - Rajasthan Digital Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap"></i> Course Details
+            </a>
+            <a href="index.html" class="btn btn-light">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div id="courseContent">
+            <!-- Course details will be loaded here -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const courses = {
+            "computer-science": {
+                name: "Computer Science & Engineering",
+                icon: "fas fa-laptop-code",
+                color: "primary",
+                duration: "4 Years",
+                degree: "B.Tech/BCA/MCA",
+                description: "Comprehensive computer science program covering programming, algorithms, data structures, software engineering, and emerging technologies.",
+                subjects: [
+                    "Programming Fundamentals (C, C++, Java)",
+                    "Data Structures & Algorithms",
+                    "Database Management Systems",
+                    "Computer Networks",
+                    "Operating Systems",
+                    "Software Engineering",
+                    "Web Development (HTML, CSS, JavaScript)",
+                    "Mobile App Development",
+                    "Artificial Intelligence & Machine Learning",
+                    "Cybersecurity",
+                    "Cloud Computing",
+                    "Project Management"
+                ],
+                careerOptions: [
+                    "Software Developer",
+                    "Web Developer",
+                    "Data Scientist",
+                    "System Administrator",
+                    "Cybersecurity Analyst",
+                    "AI/ML Engineer",
+                    "Database Administrator",
+                    "IT Consultant"
+                ],
+                colleges: ["Government College Jaipur", "Technical Institute Udaipur", "Engineering College Kota"],
+                averageSalary: "₹3-8 LPA",
+                jobDemand: "Very High"
+            },
+            agriculture: {
+                name: "Agriculture Science",
+                icon: "fas fa-seedling",
+                color: "success",
+                duration: "4 Years",
+                degree: "B.Sc Agriculture/M.Sc Agriculture",
+                description: "Modern agricultural science focusing on sustainable farming, crop management, soil science, and rural development.",
+                subjects: [
+                    "Crop Production & Management",
+                    "Soil Science & Fertility",
+                    "Plant Pathology",
+                    "Agricultural Economics",
+                    "Horticulture",
+                    "Animal Husbandry",
+                    "Agricultural Engineering",
+                    "Irrigation & Water Management",
+                    "Organic Farming",
+                    "Agricultural Marketing",
+                    "Rural Development",
+                    "Food Technology"
+                ],
+                careerOptions: [
+                    "Agricultural Officer",
+                    "Farm Manager",
+                    "Agricultural Consultant",
+                    "Research Scientist",
+                    "Extension Officer",
+                    "Food Inspector",
+                    "Agricultural Banker",
+                    "Entrepreneur"
+                ],
+                colleges: ["Agriculture College Bikaner", "Agricultural University Jodhpur", "Rural College Udaipur"],
+                averageSalary: "₹2.5-6 LPA",
+                jobDemand: "High"
+            },
+            commerce: {
+                name: "Commerce & Business Studies",
+                icon: "fas fa-chart-line",
+                color: "warning",
+                duration: "3 Years",
+                degree: "B.Com/BBA/MBA",
+                description: "Business and commerce education covering accounting, finance, marketing, and entrepreneurship skills.",
+                subjects: [
+                    "Financial Accounting",
+                    "Business Mathematics",
+                    "Economics",
+                    "Business Law",
+                    "Marketing Management",
+                    "Human Resource Management",
+                    "Banking & Insurance",
+                    "Taxation",
+                    "Business Communication",
+                    "Entrepreneurship",
+                    "E-Commerce",
+                    "International Business"
+                ],
+                careerOptions: [
+                    "Accountant",
+                    "Financial Analyst",
+                    "Marketing Executive",
+                    "Bank Manager",
+                    "Business Consultant",
+                    "Tax Advisor",
+                    "Insurance Agent",
+                    "Entrepreneur"
+                ],
+                colleges: ["Commerce College Jaipur", "Business School Udaipur", "Management Institute Kota"],
+                averageSalary: "₹2-5 LPA",
+                jobDemand: "High"
+            },
+            science: {
+                name: "Science (PCM/PCB)",
+                icon: "fas fa-flask",
+                color: "info",
+                duration: "3 Years",
+                degree: "B.Sc/M.Sc",
+                description: "Pure science education in Physics, Chemistry, Mathematics, and Biology with research opportunities.",
+                subjects: [
+                    "Physics (Mechanics, Thermodynamics, Optics)",
+                    "Chemistry (Organic, Inorganic, Physical)",
+                    "Mathematics (Calculus, Algebra, Statistics)",
+                    "Biology (Botany, Zoology, Genetics)",
+                    "Environmental Science",
+                    "Research Methodology",
+                    "Laboratory Techniques",
+                    "Scientific Computing",
+                    "Biotechnology",
+                    "Microbiology",
+                    "Biochemistry",
+                    "Applied Sciences"
+                ],
+                careerOptions: [
+                    "Research Scientist",
+                    "Laboratory Technician",
+                    "Teacher/Professor",
+                    "Quality Control Analyst",
+                    "Environmental Consultant",
+                    "Biotechnologist",
+                    "Medical Representative",
+                    "Science Writer"
+                ],
+                colleges: ["Science College Jaipur", "Research Institute Udaipur", "University College Kota"],
+                averageSalary: "₹2-6 LPA",
+                jobDemand: "Moderate to High"
+            }
+        };
+
+        function loadCourseDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course');
+            const course = courses[courseId];
+
+            if (!course) {
+                document.getElementById('courseContent').innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4>Course Not Found</h4>
+                        <p>The requested course information is not available.</p>
+                        <a href="index.html" class="btn btn-primary">Go Back to Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            document.title = `${course.name} - Rajasthan Digital Education`;
+
+            document.getElementById('courseContent').innerHTML = `
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header bg-${course.color} text-white">
+                                <h2><i class="${course.icon}"></i> ${course.name}</h2>
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <small><i class="fas fa-clock"></i> Duration: ${course.duration}</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small><i class="fas fa-certificate"></i> Degree: ${course.degree}</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small><i class="fas fa-chart-bar"></i> Demand: ${course.jobDemand}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h4>About This Course</h4>
+                                <p class="lead">${course.description}</p>
+
+                                <h4>Subjects Covered</h4>
+                                <div class="row mb-4">
+                                    ${course.subjects.map(subject => `
+                                        <div class="col-md-6 mb-2">
+                                            <i class="fas fa-book text-${course.color}"></i> ${subject}
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <h4>Career Opportunities</h4>
+                                <div class="row mb-4">
+                                    ${course.careerOptions.map(career => `
+                                        <div class="col-md-4 col-6 mb-2">
+                                            <span class="badge bg-${course.color} p-2 w-100">${career}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5><i class="fas fa-play-circle"></i> Start Learning</h5>
+                                                <a href="recorded-lectures.html" class="btn btn-${course.color} btn-sm me-2 mb-2">Watch Lectures</a>
+                                                <a href="start-live-class.html" class="btn btn-outline-${course.color} btn-sm me-2 mb-2">Join Live Class</a>
+                                                <a href="start-quiz.html" class="btn btn-success btn-sm me-2 mb-2">Take Quiz</a>
+                                                <a href="discussion-center.html" class="btn btn-info btn-sm mb-2">Ask Doubts</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5><i class="fas fa-briefcase"></i> Career Support</h5>
+                                                <a href="search-internships.html" class="btn btn-warning btn-sm me-2 mb-2">Find Internships</a>
+                                                <a href="announcements.html" class="btn btn-primary btn-sm me-2 mb-2">Job Alerts</a>
+                                                <a href="mobile-app.html" class="btn btn-secondary btn-sm mb-2">Mobile App</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-${course.color} text-white">
+                                <h5><i class="fas fa-info-circle"></i> Course Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><i class="fas fa-graduation-cap text-${course.color}"></i> <strong>Degree:</strong><br>${course.degree}</p>
+                                <p><i class="fas fa-clock text-${course.color}"></i> <strong>Duration:</strong><br>${course.duration}</p>
+                                <p><i class="fas fa-rupee-sign text-${course.color}"></i> <strong>Average Salary:</strong><br>${course.averageSalary}</p>
+                                <p><i class="fas fa-chart-line text-${course.color}"></i> <strong>Job Demand:</strong><br>${course.jobDemand}</p>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-university"></i> Available Colleges</h5>
+                            </div>
+                            <div class="card-body">
+                                ${course.colleges.map(college => `
+                                    <div class="mb-2">
+                                        <i class="fas fa-university text-success"></i> ${college}
+                                    </div>
+                                `).join('')}
+                                <a href="index.html#colleges" class="btn btn-success w-100 mt-2">View All Colleges</a>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header bg-warning text-dark">
+                                <h5><i class="fas fa-lightbulb"></i> Quick Tips</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Join study groups</li>
+                                    <li><i class="fas fa-check text-success"></i> Practice regularly</li>
+                                    <li><i class="fas fa-check text-success"></i> Attend live sessions</li>
+                                    <li><i class="fas fa-check text-success"></i> Complete assignments</li>
+                                    <li><i class="fas fa-check text-success"></i> Seek internships</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load course details on page load
+        loadCourseDetails();
+    </script>
+</body>
+</html>

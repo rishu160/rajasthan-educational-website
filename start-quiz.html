@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start a Quiz - Teacher Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-edit"></i> Start a Quiz - Teacher Panel
+            </a>
+            <a href="index.html" class="btn btn-light">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h4><i class="fas fa-chalkboard-teacher"></i> Create New Quiz</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="quizForm">
+                            <div class="mb-3">
+                                <label class="form-label">Faculty Name</label>
+                                <input type="text" class="form-control" id="facultyName" placeholder="Enter your name" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Subject Name</label>
+                                <input type="text" class="form-control" id="subjectName" placeholder="Enter subject name" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Number of Questions</label>
+                                <input type="number" class="form-control" id="numQuestions" min="1" max="50" placeholder="Enter number of questions" required>
+                            </div>
+
+                            <div id="questionsContainer">
+                                <h5>Questions</h5>
+                                <div class="question-item mb-4 p-3 border rounded" data-question="1">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6>Question 1</h6>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="text" class="form-control question-text" placeholder="Enter question" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" class="form-control option-a" placeholder="Option A" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" class="form-control option-b" placeholder="Option B" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" class="form-control option-c" placeholder="Option C" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" class="form-control option-d" placeholder="Option D" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Correct Answer</label>
+                                        <select class="form-control correct-answer" required>
+                                            <option value="">Select correct answer</option>
+                                            <option value="A">Option A</option>
+                                            <option value="B">Option B</option>
+                                            <option value="C">Option C</option>
+                                            <option value="D">Option D</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-3">
+                                <button type="button" class="btn btn-outline-primary" id="addQuestionBtn">
+                                    <i class="fas fa-plus"></i> Add Another Question
+                                </button>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Quiz Link (Auto-generated)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="quizLink" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="copyLink()">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <small class="text-muted">Share this link with students to take the quiz</small>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-rocket"></i> Create Quiz
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let questionCount = 1;
+
+        document.getElementById('addQuestionBtn').addEventListener('click', function() {
+            questionCount++;
+            const container = document.getElementById('questionsContainer');
+            
+            const questionHTML = `
+                <div class="question-item mb-4 p-3 border rounded" data-question="${questionCount}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>Question ${questionCount}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeQuestion(this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control question-text" placeholder="Enter question" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control option-a" placeholder="Option A" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control option-b" placeholder="Option B" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control option-c" placeholder="Option C" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control option-d" placeholder="Option D" required>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Correct Answer</label>
+                        <select class="form-control correct-answer" required>
+                            <option value="">Select correct answer</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', questionHTML);
+        });
+
+        function removeQuestion(button) {
+            button.closest('.question-item').remove();
+        }
+
+        function generateQuizLink() {
+            const quizId = 'quiz_' + Date.now();
+            const link = window.location.origin + '/quiz-page.html?id=' + quizId;
+            document.getElementById('quizLink').value = link;
+            return quizId;
+        }
+
+        function copyLink() {
+            const linkInput = document.getElementById('quizLink');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('Link copied to clipboard!');
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const quizId = generateQuizLink();
+            const facultyName = document.getElementById('facultyName').value;
+            const subjectName = document.getElementById('subjectName').value;
+            
+            const questions = [];
+            document.querySelectorAll('.question-item').forEach(item => {
+                const question = {
+                    text: item.querySelector('.question-text').value,
+                    options: {
+                        A: item.querySelector('.option-a').value,
+                        B: item.querySelector('.option-b').value,
+                        C: item.querySelector('.option-c').value,
+                        D: item.querySelector('.option-d').value
+                    },
+                    correct: item.querySelector('.correct-answer').value
+                };
+                questions.push(question);
+            });
+
+            const quizData = {
+                id: quizId,
+                facultyName: facultyName,
+                subjectName: subjectName,
+                questions: questions,
+                createdAt: new Date().toISOString(),
+                studentLogs: []
+            };
+
+            // Save to localStorage
+            localStorage.setItem(quizId, JSON.stringify(quizData));
+            
+            // Add to quiz list
+            let quizList = JSON.parse(localStorage.getItem('quizList') || '[]');
+            quizList.push({
+                id: quizId,
+                facultyName: facultyName,
+                subjectName: subjectName,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('quizList', JSON.stringify(quizList));
+
+            alert('Quiz created successfully! Share the link with students.');
+        });
+
+        // Generate initial link
+        generateQuizLink();
+    </script>
+</body>
+</html>

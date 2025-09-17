@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check for Quiz - Student Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-info">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-search"></i> Check for Quiz - Student Panel
+            </a>
+            <a href="index.html" class="btn btn-light">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h4><i class="fas fa-clipboard-list"></i> Available Quizzes</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="quizList">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading available quizzes...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Info Form -->
+                <div class="card mt-3" id="studentInfoCard" style="display: none;">
+                    <div class="card-header bg-warning">
+                        <h5>Enter Your Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="studentForm">
+                            <div class="mb-3">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="studentName" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Roll Number</label>
+                                <input type="text" class="form-control" id="rollNumber" placeholder="Enter your roll number" required>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-play"></i> Start Quiz
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedQuizId = null;
+
+        function loadQuizzes() {
+            const quizList = JSON.parse(localStorage.getItem('quizList') || '[]');
+            const container = document.getElementById('quizList');
+            
+            if (quizList.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-muted">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <h5>No quizzes available</h5>
+                        <p>No teacher has created any quiz yet. Please check back later.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = quizList.map(quiz => `
+                <div class="card mb-3 quiz-card" data-quiz-id="${quiz.id}">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="card-title text-primary">
+                                    <i class="fas fa-book"></i> ${quiz.subjectName}
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Made by:</strong> ${quiz.facultyName}<br>
+                                    <small class="text-muted">Created: ${new Date(quiz.createdAt).toLocaleString()}</small>
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button class="btn btn-primary" onclick="selectQuiz('${quiz.id}')">
+                                    <i class="fas fa-play-circle"></i> Take Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectQuiz(quizId) {
+            selectedQuizId = quizId;
+            document.getElementById('studentInfoCard').style.display = 'block';
+            document.getElementById('studentInfoCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentName = document.getElementById('studentName').value;
+            const rollNumber = document.getElementById('rollNumber').value;
+            
+            // Store student info in session
+            sessionStorage.setItem('currentStudent', JSON.stringify({
+                name: studentName,
+                rollNumber: rollNumber,
+                quizId: selectedQuizId
+            }));
+            
+            // Redirect to quiz page
+            window.location.href = `quiz-page.html?id=${selectedQuizId}`;
+        });
+
+        // Load quizzes on page load
+        setTimeout(loadQuizzes, 1000);
+    </script>
+</body>
+</html>
