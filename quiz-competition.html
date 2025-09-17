@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Competition - Rajasthan Digital Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .quiz-card { border: 2px solid #007bff; border-radius: 10px; }
+        .question-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; }
+        .timer { font-size: 24px; color: #dc3545; font-weight: bold; }
+        .score-board { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 15px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-trophy"></i> Quiz Competition
+            </a>
+            <a href="index.html" class="btn btn-light">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Teacher Dashboard -->
+        <div id="teacher-panel" class="row">
+            <div class="col-md-8">
+                <div class="card quiz-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-chalkboard-teacher"></i> Teacher Control Panel</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Quiz Title</label>
+                            <input type="text" class="form-control" id="quizTitle" placeholder="Enter quiz title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Time per Question (seconds)</label>
+                            <select class="form-control" id="timeLimit">
+                                <option value="30">30 seconds</option>
+                                <option value="60">1 minute</option>
+                                <option value="120">2 minutes</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success btn-lg" onclick="startQuiz()">
+                            <i class="fas fa-play"></i> Start Quiz Competition
+                        </button>
+                        <button class="btn btn-warning btn-lg ms-2" onclick="addQuestion()">
+                            <i class="fas fa-plus"></i> Add Question
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Questions List -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Questions (<span id="questionCount">0</span>)</h5>
+                    </div>
+                    <div class="card-body" id="questionsList">
+                        <p class="text-muted">No questions added yet. Click "Add Question" to start.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- Live Scoreboard -->
+                <div class="score-board">
+                    <h5><i class="fas fa-medal"></i> Live Scoreboard</h5>
+                    <div id="scoreboard">
+                        <p>Quiz not started</p>
+                    </div>
+                </div>
+
+                <!-- Quiz Status -->
+                <div class="card mt-3">
+                    <div class="card-body text-center">
+                        <h6>Quiz Status</h6>
+                        <div id="quizStatus" class="badge bg-secondary">Not Started</div>
+                        <div class="timer mt-2" id="timer">00:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Quiz Interface -->
+        <div id="student-panel" class="row" style="display: none;">
+            <div class="col-md-8 mx-auto">
+                <div class="card quiz-card">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 id="currentQuizTitle">Quiz Competition</h4>
+                        <div class="timer" id="questionTimer">30</div>
+                    </div>
+                    <div class="card-body">
+                        <div id="currentQuestion" class="question-box">
+                            <h5>Question will appear here...</h5>
+                        </div>
+                        <div id="answerOptions" class="mt-3">
+                            <!-- Answer options will be populated here -->
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-primary btn-lg" id="submitAnswer" onclick="submitAnswer()" disabled>
+                                Submit Answer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Question Modal -->
+    <div class="modal fade" id="questionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Question</label>
+                        <textarea class="form-control" id="questionText" rows="3" placeholder="Enter your question"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Option A</label>
+                        <input type="text" class="form-control" id="optionA" placeholder="Option A">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Option B</label>
+                        <input type="text" class="form-control" id="optionB" placeholder="Option B">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Option C</label>
+                        <input type="text" class="form-control" id="optionC" placeholder="Option C">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Option D</label>
+                        <input type="text" class="form-control" id="optionD" placeholder="Option D">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correct Answer</label>
+                        <select class="form-control" id="correctAnswer">
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveQuestion()">Save Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let quizActive = false;
+        let timeLeft = 30;
+        let timerInterval;
+        let students = ['Student 1', 'Student 2', 'Student 3', 'Student 4', 'Student 5'];
+        let scores = {};
+
+        // Initialize scores
+        students.forEach(student => scores[student] = 0);
+
+        function addQuestion() {
+            new bootstrap.Modal(document.getElementById('questionModal')).show();
+        }
+
+        function saveQuestion() {
+            const question = {
+                text: document.getElementById('questionText').value,
+                options: {
+                    A: document.getElementById('optionA').value,
+                    B: document.getElementById('optionB').value,
+                    C: document.getElementById('optionC').value,
+                    D: document.getElementById('optionD').value
+                },
+                correct: document.getElementById('correctAnswer').value
+            };
+
+            if (question.text && question.options.A && question.options.B && question.options.C && question.options.D) {
+                questions.push(question);
+                updateQuestionsList();
+                bootstrap.Modal.getInstance(document.getElementById('questionModal')).hide();
+                clearQuestionForm();
+            } else {
+                alert('Please fill all fields');
+            }
+        }
+
+        function clearQuestionForm() {
+            document.getElementById('questionText').value = '';
+            document.getElementById('optionA').value = '';
+            document.getElementById('optionB').value = '';
+            document.getElementById('optionC').value = '';
+            document.getElementById('optionD').value = '';
+        }
+
+        function updateQuestionsList() {
+            const list = document.getElementById('questionsList');
+            const count = document.getElementById('questionCount');
+            count.textContent = questions.length;
+
+            if (questions.length === 0) {
+                list.innerHTML = '<p class="text-muted">No questions added yet.</p>';
+                return;
+            }
+
+            list.innerHTML = questions.map((q, i) => `
+                <div class="question-box">
+                    <strong>Q${i + 1}:</strong> ${q.text}
+                    <br><small class="text-success">Correct: ${q.correct}) ${q.options[q.correct]}</small>
+                </div>
+            `).join('');
+        }
+
+        function startQuiz() {
+            if (questions.length === 0) {
+                alert('Please add at least one question first!');
+                return;
+            }
+
+            const title = document.getElementById('quizTitle').value || 'Quiz Competition';
+            document.getElementById('currentQuizTitle').textContent = title;
+            
+            quizActive = true;
+            currentQuestionIndex = 0;
+            timeLeft = parseInt(document.getElementById('timeLimit').value);
+            
+            document.getElementById('teacher-panel').style.display = 'none';
+            document.getElementById('student-panel').style.display = 'block';
+            document.getElementById('quizStatus').textContent = 'Active';
+            document.getElementById('quizStatus').className = 'badge bg-success';
+            
+            showQuestion();
+            updateScoreboard();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                endQuiz();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.getElementById('currentQuestion').innerHTML = `
+                <h5>Question ${currentQuestionIndex + 1}: ${question.text}</h5>
+            `;
+
+            document.getElementById('answerOptions').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="selectAnswer('A')">A) ${question.options.A}</button>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="selectAnswer('B')">B) ${question.options.B}</button>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="selectAnswer('C')">C) ${question.options.C}</button>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <button class="btn btn-outline-primary w-100" onclick="selectAnswer('D')">D) ${question.options.D}</button>
+                    </div>
+                </div>
+            `;
+
+            startTimer();
+        }
+
+        function selectAnswer(option) {
+            document.querySelectorAll('#answerOptions button').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            event.target.classList.remove('btn-outline-primary');
+            event.target.classList.add('btn-primary');
+            document.getElementById('submitAnswer').disabled = false;
+            window.selectedAnswer = option;
+        }
+
+        function submitAnswer() {
+            const correct = questions[currentQuestionIndex].correct;
+            if (window.selectedAnswer === correct) {
+                // Simulate random student scoring
+                const randomStudent = students[Math.floor(Math.random() * students.length)];
+                scores[randomStudent] += 10;
+            }
+            
+            currentQuestionIndex++;
+            document.getElementById('submitAnswer').disabled = true;
+            clearInterval(timerInterval);
+            
+            setTimeout(() => {
+                showQuestion();
+                updateScoreboard();
+            }, 1000);
+        }
+
+        function startTimer() {
+            timeLeft = parseInt(document.getElementById('timeLimit').value);
+            document.getElementById('questionTimer').textContent = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('questionTimer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswer();
+                }
+            }, 1000);
+        }
+
+        function updateScoreboard() {
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            document.getElementById('scoreboard').innerHTML = sortedScores.map((entry, i) => `
+                <div class="d-flex justify-content-between">
+                    <span>${i + 1}. ${entry[0]}</span>
+                    <span>${entry[1]} pts</span>
+                </div>
+            `).join('');
+        }
+
+        function endQuiz() {
+            quizActive = false;
+            document.getElementById('quizStatus').textContent = 'Completed';
+            document.getElementById('quizStatus').className = 'badge bg-success';
+            
+            const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+            
+            document.getElementById('currentQuestion').innerHTML = `
+                <div class="text-center">
+                    <h3><i class="fas fa-trophy text-warning"></i> Quiz Completed!</h3>
+                    <h4>Winner: ${winner[0]} (${winner[1]} points)</h4>
+                    <button class="btn btn-primary mt-3" onclick="location.reload()">Start New Quiz</button>
+                </div>
+            `;
+            document.getElementById('answerOptions').innerHTML = '';
+            document.getElementById('questionTimer').textContent = '00';
+        }
+
+        // Initialize scoreboard
+        updateScoreboard();
+    </script>
+</body>
+</html>

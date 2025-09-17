@@ -6,270 +6,208 @@
     <title>College Details - Rajasthan Digital Education</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="rajasthan-style.css">
 </head>
 <body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-university"></i> College Details
+            </a>
+            <a href="index.html" class="btn btn-light">Back to Home</a>
+        </div>
+    </nav>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="index.html">
-            <i class="fas fa-arrow-left me-2"></i>Rajasthan Digital Education
-        </a>
-    </div>
-</nav>
-
-<!-- College Header -->
-<section class="py-5" style="background: linear-gradient(135deg, #1E40AF, #3B82F6); margin-top: 60px;">
-    <div class="container">
-        <div class="row align-items-center text-white">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3" id="collegeName">Government College, Jaipur</h1>
-                <p class="lead" id="collegeDescription">Premier institution offering Arts, Science and Commerce education in rural Rajasthan</p>
-                <div class="college-stats mt-4">
-                    <span class="badge bg-light text-dark me-3"><i class="fas fa-users"></i> <span id="studentCount">2,500+</span> Students</span>
-                    <span class="badge bg-light text-dark me-3"><i class="fas fa-chalkboard-teacher"></i> <span id="teacherCount">85</span> Teachers</span>
-                    <span class="badge bg-light text-dark"><i class="fas fa-calendar"></i> Est. 1985</span>
-                </div>
-            </div>
-            <div class="col-lg-4 text-center">
-                <i class="fas fa-university fa-5x"></i>
-            </div>
+    <div class="container mt-4">
+        <div id="collegeContent">
+            <!-- College details will be loaded here -->
         </div>
     </div>
-</section>
 
-<!-- College Details -->
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h3 class="fw-bold mb-4">About the College</h3>
-                        <p id="aboutText">Government College Jaipur is one of the leading educational institutions in rural Rajasthan, established in 1985. The college is committed to providing quality higher education to students from rural and semi-urban areas. With state-of-the-art facilities and experienced faculty, we offer comprehensive programs in Arts, Science, and Commerce streams.</p>
-                        
-                        <h4 class="fw-bold mt-4 mb-3">Key Features</h4>
-                        <div class="row g-3" id="keyFeatures">
-                            <div class="col-md-6">
-                                <div class="feature-item p-3 bg-light rounded">
-                                    <i class="fas fa-wifi text-primary me-2"></i>
-                                    <strong>Digital Classrooms</strong>
-                                    <p class="mb-0 small">Smart boards and high-speed internet</p>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const colleges = {
+            jaipur: {
+                name: "Government College, Jaipur",
+                image: "images/colleges/jaipur.jpg",
+                description: "Established in 1965, Government College Jaipur is one of the premier educational institutions in Rajasthan, offering quality education in Arts, Science, and Commerce.",
+                courses: ["B.A.", "B.Sc.", "B.Com", "M.A.", "M.Sc.", "M.Com"],
+                facilities: ["Digital Library", "Computer Lab", "Science Labs", "Sports Complex", "Hostel", "Cafeteria"],
+                faculty: 85,
+                students: 2500,
+                address: "Malviya Nagar, Jaipur, Rajasthan - 302017",
+                phone: "0141-2345678",
+                email: "info@gcjaipur.edu.in",
+                website: "www.gcjaipur.edu.in",
+                established: "1965",
+                affiliation: "University of Rajasthan"
+            },
+            udaipur: {
+                name: "Maharana Pratap College, Udaipur",
+                image: "images/colleges/udaipur.jpg",
+                description: "A leading technical and vocational education college established in 1972, focusing on engineering and skill development programs.",
+                courses: ["B.Tech", "Diploma", "ITI", "M.Tech", "Polytechnic"],
+                facilities: ["Engineering Labs", "Workshop", "CAD Center", "Placement Cell", "Industry Tie-ups", "Research Center"],
+                faculty: 65,
+                students: 1800,
+                address: "Sector 14, Udaipur, Rajasthan - 313001",
+                phone: "0294-2567890",
+                email: "info@mpcudaipur.edu.in",
+                website: "www.mpcudaipur.edu.in",
+                established: "1972",
+                affiliation: "Rajasthan Technical University"
+            },
+            bikaner: {
+                name: "Agriculture College, Bikaner",
+                image: "images/colleges/bikaner.jpg",
+                description: "Specialized agricultural college established in 1968, dedicated to modern farming techniques and rural development.",
+                courses: ["B.Sc Agriculture", "M.Sc Agriculture", "Horticulture", "Agricultural Engineering"],
+                facilities: ["Research Farm", "Greenhouse", "Soil Testing Lab", "Seed Bank", "Agricultural Machinery", "Extension Center"],
+                faculty: 45,
+                students: 1200,
+                address: "Agricultural University Campus, Bikaner, Rajasthan - 334006",
+                phone: "0151-2234567",
+                email: "info@acbikaner.edu.in",
+                website: "www.acbikaner.edu.in",
+                established: "1968",
+                affiliation: "Rajasthan Agricultural University"
+            }
+        };
+
+        function loadCollegeDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const collegeId = urlParams.get('college');
+            const college = colleges[collegeId];
+
+            if (!college) {
+                document.getElementById('collegeContent').innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4>College Not Found</h4>
+                        <p>The requested college information is not available.</p>
+                        <a href="index.html" class="btn btn-primary">Go Back to Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            document.title = `${college.name} - Rajasthan Digital Education`;
+
+            document.getElementById('collegeContent').innerHTML = `
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h2><i class="fas fa-university"></i> ${college.name}</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <img src="${college.image}" alt="${college.name}" class="img-fluid rounded" 
+                                             onerror="this.src='https://via.placeholder.com/300x200?text=College+Image'">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>About the College</h4>
+                                        <p>${college.description}</p>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <strong>Established:</strong> ${college.established}<br>
+                                                <strong>Faculty:</strong> ${college.faculty} Teachers<br>
+                                                <strong>Students:</strong> ${college.students}+
+                                            </div>
+                                            <div class="col-6">
+                                                <strong>Affiliation:</strong> ${college.affiliation}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Courses Offered</h4>
+                                <div class="row mb-4">
+                                    ${college.courses.map(course => `
+                                        <div class="col-md-3 col-6 mb-2">
+                                            <span class="badge bg-primary p-2 w-100">${course}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <h4>Facilities</h4>
+                                <div class="row mb-4">
+                                    ${college.facilities.map(facility => `
+                                        <div class="col-md-4 col-6 mb-2">
+                                            <i class="fas fa-check-circle text-success"></i> ${facility}
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5>Quick Actions</h5>
+                                                <a href="start-quiz.html" class="btn btn-primary btn-sm me-2 mb-2">Take Quiz</a>
+                                                <a href="discussion-center.html" class="btn btn-success btn-sm me-2 mb-2">Ask Doubts</a>
+                                                <a href="announcements.html" class="btn btn-warning btn-sm me-2 mb-2">View Notices</a>
+                                                <a href="search-internships.html" class="btn btn-info btn-sm mb-2">Find Internships</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5>Digital Services</h5>
+                                                <a href="recorded-lectures.html" class="btn btn-outline-primary btn-sm me-2 mb-2">Lectures</a>
+                                                <a href="start-live-class.html" class="btn btn-outline-success btn-sm me-2 mb-2">Live Classes</a>
+                                                <a href="mobile-app.html" class="btn btn-outline-warning btn-sm mb-2">Mobile App</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-item p-3 bg-light rounded">
-                                    <i class="fas fa-book text-success me-2"></i>
-                                    <strong>Digital Library</strong>
-                                    <p class="mb-0 small">10,000+ books and e-resources</p>
-                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-info-circle"></i> Contact Information</h5>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-item p-3 bg-light rounded">
-                                    <i class="fas fa-microscope text-warning me-2"></i>
-                                    <strong>Science Labs</strong>
-                                    <p class="mb-0 small">Well-equipped laboratories</p>
-                                </div>
+                            <div class="card-body">
+                                <p><i class="fas fa-map-marker-alt text-primary"></i> <strong>Address:</strong><br>${college.address}</p>
+                                <p><i class="fas fa-phone text-primary"></i> <strong>Phone:</strong><br>${college.phone}</p>
+                                <p><i class="fas fa-envelope text-primary"></i> <strong>Email:</strong><br>${college.email}</p>
+                                <p><i class="fas fa-globe text-primary"></i> <strong>Website:</strong><br>${college.website}</p>
+                                <a href="mailto:${college.email}" class="btn btn-primary w-100 mb-2">Send Email</a>
+                                <a href="tel:${college.phone}" class="btn btn-success w-100">Call Now</a>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-item p-3 bg-light rounded">
-                                    <i class="fas fa-laptop text-info me-2"></i>
-                                    <strong>Computer Lab</strong>
-                                    <p class="mb-0 small">50+ computers with latest software</p>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header bg-warning text-dark">
+                                <h5><i class="fas fa-chart-bar"></i> College Stats</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <h4 class="text-primary">${college.faculty}</h4>
+                                        <small>Faculty</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h4 class="text-success">${college.students}+</h4>
+                                        <small>Students</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h4 class="text-warning">${college.courses.length}</h4>
+                                        <small>Courses</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            `;
+        }
 
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h3 class="fw-bold mb-4">Courses Offered</h3>
-                        <div class="row g-3" id="coursesOffered">
-                            <div class="col-md-4">
-                                <div class="course-item p-3 border rounded">
-                                    <h5 class="text-primary">Bachelor of Arts (B.A.)</h5>
-                                    <p class="small mb-2">Duration: 3 Years</p>
-                                    <p class="small">Subjects: Hindi, English, History, Political Science, Economics, Sociology</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="course-item p-3 border rounded">
-                                    <h5 class="text-success">Bachelor of Science (B.Sc.)</h5>
-                                    <p class="small mb-2">Duration: 3 Years</p>
-                                    <p class="small">Subjects: Physics, Chemistry, Mathematics, Biology, Computer Science</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="course-item p-3 border rounded">
-                                    <h5 class="text-warning">Bachelor of Commerce (B.Com)</h5>
-                                    <p class="small mb-2">Duration: 3 Years</p>
-                                    <p class="small">Subjects: Accounting, Business Studies, Economics, Statistics</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h3 class="fw-bold mb-4">Faculty & Staff</h3>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="faculty-item p-3 bg-light rounded">
-                                    <h6 class="fw-bold">Dr. Rajesh Sharma</h6>
-                                    <p class="small mb-1">Principal & Professor of Physics</p>
-                                    <p class="small text-muted">Ph.D. in Physics, 25+ years experience</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="faculty-item p-3 bg-light rounded">
-                                    <h6 class="fw-bold">Prof. Sunita Gupta</h6>
-                                    <p class="small mb-1">Head of Commerce Department</p>
-                                    <p class="small text-muted">M.Com, CA, 20+ years experience</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="faculty-item p-3 bg-light rounded">
-                                    <h6 class="fw-bold">Dr. Amit Kumar</h6>
-                                    <p class="small mb-1">Associate Professor of Mathematics</p>
-                                    <p class="small text-muted">Ph.D. in Mathematics, 15+ years experience</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="faculty-item p-3 bg-light rounded">
-                                    <h6 class="fw-bold">Ms. Priya Jain</h6>
-                                    <p class="small mb-1">Assistant Professor of English</p>
-                                    <p class="small text-muted">M.A. English Literature, 10+ years experience</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Quick Info</h5>
-                        <ul class="list-unstyled" id="quickInfo">
-                            <li><i class="fas fa-map-marker-alt text-primary me-2"></i><strong>Location:</strong> Jaipur, Rajasthan</li>
-                            <li><i class="fas fa-phone text-success me-2"></i><strong>Phone:</strong> +91-141-2345678</li>
-                            <li><i class="fas fa-envelope text-warning me-2"></i><strong>Email:</strong> info@gcjaipur.edu.in</li>
-                            <li><i class="fas fa-globe text-info me-2"></i><strong>Website:</strong> www.gcjaipur.edu.in</li>
-                            <li><i class="fas fa-calendar text-danger me-2"></i><strong>Established:</strong> 1985</li>
-                            <li><i class="fas fa-certificate text-secondary me-2"></i><strong>Affiliation:</strong> University of Rajasthan</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Admission Process</h5>
-                        <div class="admission-steps">
-                            <div class="step mb-3">
-                                <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">1</div>
-                                <span>Online Application</span>
-                            </div>
-                            <div class="step mb-3">
-                                <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">2</div>
-                                <span>Document Verification</span>
-                            </div>
-                            <div class="step mb-3">
-                                <div class="step-number bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">3</div>
-                                <span>Merit List Publication</span>
-                            </div>
-                            <div class="step mb-3">
-                                <div class="step-number bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">4</div>
-                                <span>Fee Payment & Enrollment</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary w-100 mt-3">Apply Now</button>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Campus Facilities</h5>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success me-2"></i>Hostel Accommodation</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Cafeteria</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Sports Complex</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Medical Facility</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Transportation</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Placement Cell</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// College data
-const colleges = {
-    'jaipur': {
-        name: 'Government College, Jaipur',
-        description: 'Premier institution offering Arts, Science and Commerce education in rural Rajasthan',
-        students: '2,500+',
-        teachers: '85',
-        about: 'Government College Jaipur is one of the leading educational institutions in rural Rajasthan, established in 1985. The college is committed to providing quality higher education to students from rural and semi-urban areas.',
-        location: 'Jaipur, Rajasthan',
-        phone: '+91-141-2345678',
-        email: 'info@gcjaipur.edu.in',
-        website: 'www.gcjaipur.edu.in'
-    },
-    'udaipur': {
-        name: 'Maharana Pratap College, Udaipur',
-        description: 'Leading technical and vocational education institution',
-        students: '1,800+',
-        teachers: '65',
-        about: 'Maharana Pratap College Udaipur specializes in technical and vocational education, preparing students for modern industry demands.',
-        location: 'Udaipur, Rajasthan',
-        phone: '+91-294-2345678',
-        email: 'info@mpcudaipur.edu.in',
-        website: 'www.mpcudaipur.edu.in'
-    },
-    'bikaner': {
-        name: 'Rajasthan Agriculture College, Bikaner',
-        description: 'Specialized agricultural science and rural development institution',
-        students: '1,200+',
-        teachers: '45',
-        about: 'Rajasthan Agriculture College Bikaner focuses on agricultural science and rural development, serving the farming community of Rajasthan.',
-        location: 'Bikaner, Rajasthan',
-        phone: '+91-151-2345678',
-        email: 'info@racbikaner.edu.in',
-        website: 'www.racbikaner.edu.in'
-    }
-};
-
-// Get college parameter from URL
-const urlParams = new URLSearchParams(window.location.search);
-const collegeId = urlParams.get('college') || 'jaipur';
-const college = colleges[collegeId];
-
-if (college) {
-    document.getElementById('collegeName').textContent = college.name;
-    document.getElementById('collegeDescription').textContent = college.description;
-    document.getElementById('studentCount').textContent = college.students;
-    document.getElementById('teacherCount').textContent = college.teachers;
-    document.getElementById('aboutText').textContent = college.about;
-    
-    // Update quick info
-    const quickInfo = document.getElementById('quickInfo');
-    quickInfo.innerHTML = `
-        <li><i class="fas fa-map-marker-alt text-primary me-2"></i><strong>Location:</strong> ${college.location}</li>
-        <li><i class="fas fa-phone text-success me-2"></i><strong>Phone:</strong> ${college.phone}</li>
-        <li><i class="fas fa-envelope text-warning me-2"></i><strong>Email:</strong> ${college.email}</li>
-        <li><i class="fas fa-globe text-info me-2"></i><strong>Website:</strong> ${college.website}</li>
-        <li><i class="fas fa-calendar text-danger me-2"></i><strong>Established:</strong> 1985</li>
-        <li><i class="fas fa-certificate text-secondary me-2"></i><strong>Affiliation:</strong> University of Rajasthan</li>
-    `;
-}
-</script>
-
+        // Load college details on page load
+        loadCollegeDetails();
+    </script>
 </body>
 </html>

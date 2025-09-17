@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Center - Rajasthan Digital Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .discussion-card { border-left: 4px solid #007bff; }
+        .answered-card { border-left: 4px solid #28a745; }
+        .flagged-card { border-left: 4px solid #dc3545; }
+        .user-status { padding: 2px 8px; border-radius: 12px; font-size: 12px; }
+        .status-good { background: #d4edda; color: #155724; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-danger { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-info">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-comments"></i> Discussion Center
+            </a>
+            <div>
+                <span id="userStatus" class="user-status me-3"></span>
+                <a href="index.html" class="btn btn-light">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Surveillance Warning -->
+        <div class="alert alert-warning">
+            <i class="fas fa-eye"></i> <strong>Notice:</strong> This discussion center is under complete surveillance. 
+            Inappropriate content or behavior will result in account marking as defaulter (Red Status). 
+            Please maintain academic decorum.
+        </div>
+
+        <!-- Create Discussion (Students Only) -->
+        <div class="card mb-4" id="createDiscussionCard">
+            <div class="card-header bg-info text-white">
+                <h5><i class="fas fa-plus-circle"></i> Ask Your Doubt</h5>
+            </div>
+            <div class="card-body">
+                <form id="discussionForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Subject</label>
+                            <select class="form-control" id="subject" required>
+                                <option value="">Select Subject</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Priority</label>
+                            <select class="form-control" id="priority" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Question Title</label>
+                        <input type="text" class="form-control" id="questionTitle" placeholder="Brief title of your question" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Detailed Question</label>
+                        <textarea class="form-control" id="questionDetails" rows="4" placeholder="Explain your doubt in detail..." required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="studentName" placeholder="Your full name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">College</label>
+                            <input type="text" class="form-control" id="studentCollege" placeholder="Your college name" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info mt-3">
+                        <i class="fas fa-paper-plane"></i> Post Question
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Faculty Response Panel (Teachers Only) -->
+        <div class="card mb-4" id="facultyPanel" style="display: none;">
+            <div class="card-header bg-success text-white">
+                <h5><i class="fas fa-chalkboard-teacher"></i> Faculty Response Panel</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-primary" id="pendingCount">0</h3>
+                                <p>Pending Questions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-success" id="answeredCount">0</h3>
+                                <p>Answered Today</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h3 class="text-danger" id="flaggedCount">0</h3>
+                                <p>Flagged Content</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discussions List -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Recent Discussions</h4>
+                    <span id="discussionCount" class="badge bg-info">0 discussions</span>
+                </div>
+                <div id="discussionsList">
+                    <!-- Discussions will be loaded here -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h6><i class="fas fa-filter"></i> Filter Discussions</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <select class="form-control" id="filterSubject" onchange="filterDiscussions()">
+                                <option value="">All Subjects</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Commerce">Commerce</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control" id="filterStatus" onchange="filterDiscussions()">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="answered">Answered</option>
+                                <option value="flagged">Flagged</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Guidelines -->
+                <div class="card mt-3">
+                    <div class="card-header bg-warning text-dark">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Guidelines</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success"></i> Ask academic questions only</li>
+                            <li><i class="fas fa-check text-success"></i> Be respectful and polite</li>
+                            <li><i class="fas fa-check text-success"></i> Provide clear details</li>
+                            <li><i class="fas fa-times text-danger"></i> No inappropriate content</li>
+                            <li><i class="fas fa-times text-danger"></i> No spam or irrelevant posts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer Modal (Faculty Only) -->
+    <div class="modal fade" id="answerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Answer Student Question</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="questionPreview" class="mb-3 p-3 bg-light rounded"></div>
+                    <form id="answerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Your Answer</label>
+                            <textarea class="form-control" id="answerText" rows="5" placeholder="Provide detailed answer..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Additional Resources (Optional)</label>
+                            <input type="url" class="form-control" id="resourceLink" placeholder="Link to helpful resources">
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit Answer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flag Content Modal (Faculty Only) -->
+    <div class="modal fade" id="flagModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Flag Inappropriate Content</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="flagForm">
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Flagging</label>
+                            <select class="form-control" id="flagReason" required>
+                                <option value="">Select reason</option>
+                                <option value="inappropriate">Inappropriate Content</option>
+                                <option value="spam">Spam</option>
+                                <option value="irrelevant">Irrelevant to Studies</option>
+                                <option value="offensive">Offensive Language</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Additional Comments</label>
+                            <textarea class="form-control" id="flagComments" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Flag Content</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let discussions = [
+            {
+                id: 1,
+                subject: "Mathematics",
+                title: "Integration by Parts Problem",
+                details: "I'm having trouble understanding integration by parts. Can someone explain the formula and provide an example?",
+                studentName: "Rahul Sharma",
+                college: "Government College Jaipur",
+                priority: "medium",
+                status: "answered",
+                postedDate: "2024-01-15",
+                answer: "Integration by parts formula is ∫u dv = uv - ∫v du. Choose u as the function that becomes simpler when differentiated.",
+                answeredBy: "Prof. Mathematics",
+                answeredDate: "2024-01-15"
+            },
+            {
+                id: 2,
+                subject: "Physics",
+                title: "Quantum Mechanics Basics",
+                details: "What is wave-particle duality? How does it apply to electrons?",
+                studentName: "Priya Gupta",
+                college: "Science College Udaipur",
+                priority: "high",
+                status: "pending",
+                postedDate: "2024-01-16"
+            }
+        ];
+
+        let currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        let selectedDiscussionId = null;
+        let userStatus = localStorage.getItem('userStatus') || 'good';
+
+        // Initialize page based on user type
+        initializePage();
+
+        function initializePage() {
+            updateUserStatus();
+            
+            if (currentUser.userType === 'teacher') {
+                document.getElementById('facultyPanel').style.display = 'block';
+                document.getElementById('createDiscussionCard').style.display = 'none';
+                updateFacultyStats();
+            }
+            
+            loadDiscussions();
+        }
+
+        function updateUserStatus() {
+            const statusElement = document.getElementById('userStatus');
+            const statusText = {
+                'good': 'Good Standing',
+                'warning': 'Warning',
+                'danger': 'Defaulter'
+            };
+            
+            statusElement.textContent = statusText[userStatus];
+            statusElement.className = `user-status status-${userStatus}`;
+        }
+
+        document.getElementById('discussionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (userStatus === 'danger') {
+                alert('Your account is marked as defaulter. You cannot post new discussions.');
+                return;
+            }
+
+            const newDiscussion = {
+                id: Date.now(),
+                subject: document.getElementById('subject').value,
+                title: document.getElementById('questionTitle').value,
+                details: document.getElementById('questionDetails').value,
+                studentName: document.getElementById('studentName').value,
+                college: document.getElementById('studentCollege').value,
+                priority: document.getElementById('priority').value,
+                status: 'pending',
+                postedDate: new Date().toISOString().split('T')[0]
+            };
+
+            discussions.unshift(newDiscussion);
+            localStorage.setItem('discussions', JSON.stringify(discussions));
+            
+            // Notify faculty (simulation)
+            notifyFaculty(newDiscussion);
+            
+            loadDiscussions();
+            this.reset();
+            alert('Your question has been posted and faculty members have been notified!');
+        });
+
+        function loadDiscussions() {
+            const savedDiscussions = localStorage.getItem('discussions');
+            if (savedDiscussions) {
+                discussions = JSON.parse(savedDiscussions);
+            }
+
+            displayDiscussions(discussions);
+            updateFacultyStats();
+        }
+
+        function displayDiscussions(discussionsToShow) {
+            const container = document.getElementById('discussionsList');
+            document.getElementById('discussionCount').textContent = `${discussionsToShow.length} discussions`;
+            
+            if (discussionsToShow.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted py-4"><h5>No discussions found</h5></div>';
+                return;
+            }
+
+            container.innerHTML = discussionsToShow.map(discussion => `
+                <div class="card mb-3 ${getDiscussionCardClass(discussion.status)}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="card-title">
+                                    ${discussion.title}
+                                    ${getStatusBadge(discussion.status)}
+                                    ${getPriorityBadge(discussion.priority)}
+                                </h5>
+                                <h6 class="text-muted mb-2">
+                                    <i class="fas fa-book"></i> ${discussion.subject} | 
+                                    <i class="fas fa-user"></i> ${discussion.studentName} | 
+                                    <i class="fas fa-university"></i> ${discussion.college}
+                                </h6>
+                                <p class="card-text">${discussion.details}</p>
+                                
+                                ${discussion.answer ? `
+                                    <div class="mt-3 p-3 bg-light rounded">
+                                        <h6 class="text-success"><i class="fas fa-check-circle"></i> Answer:</h6>
+                                        <p class="mb-1">${discussion.answer}</p>
+                                        <small class="text-muted">Answered by: ${discussion.answeredBy} on ${new Date(discussion.answeredDate).toLocaleDateString()}</small>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        Posted on: ${new Date(discussion.postedDate).toLocaleDateString()}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${currentUser.userType === 'teacher' ? `
+                            <div class="mt-3">
+                                ${discussion.status === 'pending' ? `
+                                    <button class="btn btn-success btn-sm me-2" onclick="answerQuestion(${discussion.id})">
+                                        <i class="fas fa-reply"></i> Answer
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-danger btn-sm" onclick="flagContent(${discussion.id})">
+                                    <i class="fas fa-flag"></i> Flag
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getDiscussionCardClass(status) {
+            switch(status) {
+                case 'answered': return 'answered-card';
+                case 'flagged': return 'flagged-card';
+                default: return 'discussion-card';
+            }
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                'pending': '<span class="badge bg-warning ms-2">Pending</span>',
+                'answered': '<span class="badge bg-success ms-2">Answered</span>',
+                'flagged': '<span class="badge bg-danger ms-2">Flagged</span>'
+            };
+            return badges[status] || '';
+        }
+
+        function getPriorityBadge(priority) {
+            const badges = {
+                'urgent': '<span class="badge bg-danger ms-1">Urgent</span>',
+                'high': '<span class="badge bg-warning ms-1">High</span>',
+                'medium': '<span class="badge bg-info ms-1">Medium</span>',
+                'low': '<span class="badge bg-secondary ms-1">Low</span>'
+            };
+            return badges[priority] || '';
+        }
+
+        function filterDiscussions() {
+            const subjectFilter = document.getElementById('filterSubject').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+
+            let filtered = discussions.filter(discussion => {
+                if (subjectFilter && discussion.subject !== subjectFilter) return false;
+                if (statusFilter && discussion.status !== statusFilter) return false;
+                return true;
+            });
+
+            displayDiscussions(filtered);
+        }
+
+        function answerQuestion(discussionId) {
+            selectedDiscussionId = discussionId;
+            const discussion = discussions.find(d => d.id === discussionId);
+            
+            document.getElementById('questionPreview').innerHTML = `
+                <h6>${discussion.title}</h6>
+                <p>${discussion.details}</p>
+                <small class="text-muted">Asked by: ${discussion.studentName}</small>
+            `;
+            
+            new bootstrap.Modal(document.getElementById('answerModal')).show();
+        }
+
+        document.getElementById('answerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const discussionIndex = discussions.findIndex(d => d.id === selectedDiscussionId);
+            if (discussionIndex !== -1) {
+                discussions[discussionIndex].answer = document.getElementById('answerText').value;
+                discussions[discussionIndex].answeredBy = currentUser.email || 'Faculty';
+                discussions[discussionIndex].answeredDate = new Date().toISOString().split('T')[0];
+                discussions[discussionIndex].status = 'answered';
+                
+                localStorage.setItem('discussions', JSON.stringify(discussions));
+                loadDiscussions();
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('answerModal')).hide();
+            this.reset();
+            alert('Answer submitted successfully!');
+        });
+
+        function flagContent(discussionId) {
+            selectedDiscussionId = discussionId;
+            new bootstrap.Modal(document.getElementById('flagModal')).show();
+        }
+
+        document.getElementById('flagForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const discussionIndex = discussions.findIndex(d => d.id === selectedDiscussionId);
+            if (discussionIndex !== -1) {
+                discussions[discussionIndex].status = 'flagged';
+                discussions[discussionIndex].flagReason = document.getElementById('flagReason').value;
+                discussions[discussionIndex].flagComments = document.getElementById('flagComments').value;
+                
+                // Mark student as defaulter if flagged multiple times
+                const studentName = discussions[discussionIndex].studentName;
+                const flaggedCount = discussions.filter(d => d.studentName === studentName && d.status === 'flagged').length;
+                
+                if (flaggedCount >= 2) {
+                    localStorage.setItem('userStatus', 'danger');
+                    userStatus = 'danger';
+                    updateUserStatus();
+                }
+                
+                localStorage.setItem('discussions', JSON.stringify(discussions));
+                loadDiscussions();
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('flagModal')).hide();
+            this.reset();
+            alert('Content has been flagged and appropriate action will be taken.');
+        });
+
+        function updateFacultyStats() {
+            if (currentUser.userType === 'teacher') {
+                const pending = discussions.filter(d => d.status === 'pending').length;
+                const answered = discussions.filter(d => d.status === 'answered' && d.answeredDate === new Date().toISOString().split('T')[0]).length;
+                const flagged = discussions.filter(d => d.status === 'flagged').length;
+                
+                document.getElementById('pendingCount').textContent = pending;
+                document.getElementById('answeredCount').textContent = answered;
+                document.getElementById('flaggedCount').textContent = flagged;
+            }
+        }
+
+        function notifyFaculty(discussion) {
+            // Simulation of faculty notification
+            console.log(`Faculty notified about new ${discussion.priority} priority question in ${discussion.subject}`);
+        }
+    </script>
+</body>
+</html>

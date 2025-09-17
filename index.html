@@ -16,7 +16,7 @@
 	<meta property="og:description" content="Government initiative for rural college education with AI chatbot, payment gateway, and live classes">
 	<meta property="og:image" content="https://rajasthan-education-platform.web.app/images/icon/logo.png">
 	<meta property="og:url" content="https://rajasthan-education-platform.web.app">
-	<meta property="og:type" content="website">
+	<meta property="og:type="website">
 	
 	<!-- Twitter Card Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image">
@@ -30,6 +30,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="stylesheet" type="text/css" href="rajasthan-style.css">
 	<link rel="stylesheet" type="text/css" href="css/chatbot.css">
+
 	<link rel="manifest" href="manifest.json">
 	<meta name="theme-color" content="#FF6B35">
 	
@@ -59,6 +60,52 @@
 		nav ul, .srch, .get-started {
 			display: none !important;
 		}
+	}
+	
+	/* Services Section Font Improvements */
+	#services {
+		font-family: 'Arial', 'Helvetica', sans-serif !important;
+		background: #ffffff !important;
+	}
+	
+	#services h2, #services h3, #services h4 {
+		font-weight: 900 !important;
+		color: #000000 !important;
+		font-size: 28px !important;
+		text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+	}
+	
+	#services p, #services .card-text {
+		font-size: 18px !important;
+		font-weight: 700 !important;
+		color: #000000 !important;
+		line-height: 1.8 !important;
+		text-shadow: 1px 1px 2px rgba(0,0,0,0.2) !important;
+	}
+	
+	#services .card-title {
+		font-size: 24px !important;
+		font-weight: 800 !important;
+		color: #000000 !important;
+		text-shadow: 1px 1px 3px rgba(0,0,0,0.3) !important;
+	}
+	
+	#services .card {
+		background: #ffffff !important;
+		border: 2px solid #000000 !important;
+	}
+	
+	#services .service-icon {
+		font-size: 52px !important;
+		color: #ff0000 !important;
+		text-shadow: 3px 3px 6px rgba(0,0,0,0.4) !important;
+	}
+	
+	/* Ultra Visible Text */
+	#services * {
+		color: #000000 !important;
+		font-weight: 900 !important;
+		font-size: 20px !important;
 	}
 	</style>
 	
@@ -96,6 +143,7 @@
 	<script type="text/javascript" src="js/voice-assistant.js"></script>
 	<script type="text/javascript" src="js/search.js"></script>
 	<script type="text/javascript" src="js/chatbot-init.js"></script>
+
 </head>
 <body>
 
@@ -144,6 +192,11 @@
 						<li><a class="dropdown-item" href="add-college-guide.html"><i class="fas fa-university me-2"></i>Add College</a></li>
 						<li><a class="dropdown-item" href="start-live-class.html"><i class="fas fa-video me-2"></i>Start Live Class</a></li>
 						<li><a class="dropdown-item" href="faculty-questions.html"><i class="fas fa-question-circle me-2"></i>Ask Faculty</a></li>
+						<li><a class="dropdown-item" href="start-quiz.html"><i class="fas fa-edit me-2"></i>Start a Quiz</a></li>
+						<li><a class="dropdown-item" href="check-quiz.html"><i class="fas fa-search me-2"></i>Check for Quiz</a></li>
+						<li><a class="dropdown-item" href="search-internships.html"><i class="fas fa-briefcase me-2"></i>Search for Internships</a></li>
+						<li><a class="dropdown-item" href="announcements.html"><i class="fas fa-bullhorn me-2"></i>Announcements</a></li>
+						<li><a class="dropdown-item" href="discussion-center.html"><i class="fas fa-comments me-2"></i>Discussion Center</a></li>
 						<li><a class="dropdown-item" href="college-contact.html"><i class="fas fa-phone me-2"></i>Contact College</a></li>
 					</ul>
 				</div>
@@ -166,7 +219,7 @@
 					<h1 class="display-4 fw-bold mb-4">Remote Classroom for<br><span class="text-warning">Rural Colleges of Rajasthan</span></h1>
 					<p class="lead mb-4">Bringing quality education to every village. Government of Rajasthan's special remote classroom platform for rural colleges under Digital India Mission.</p>
 					<div class="hero-buttons">
-						<a href="#courses" class="btn btn-light btn-lg me-3"><i class="fas fa-play-circle"></i> View Courses</a>
+						<a href="#courses" class="btn btn-light btn-lg me-3"><i class="fas fa-play-circle"></i></a>
 						<a href="#colleges" class="btn btn-outline-light btn-lg"><i class="fas fa-university"></i> Find Colleges</a>
 					</div>
 					<div class="stats-row mt-4">
@@ -255,7 +308,7 @@
 						<div class="college-icon mb-3">
 							<i class="fas fa-university fa-3x text-warning"></i>
 						</div>
-						<h5 class="card-title">Rajasthan Agriculture College, Bikaner</h5>
+						<h5 class="card-title">Agriculture College, Bikaner</h5>
 						<p class="card-text">Agricultural Science and Rural Development</p>
 						<div class="course-list mb-2">
 							<span class="badge bg-warning me-1">B.Sc Agri</span>
@@ -267,72 +320,6 @@
 							<small class="text-muted d-block"><i class="fas fa-chalkboard-teacher"></i> 45 Teachers</small>
 						</div>
 						<a href="college-details.html?college=bikaner" class="btn btn-warning">View Details</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class="col-lg-4 col-md-6">
-				<div class="card h-100 shadow-sm border-0">
-					<div class="card-body text-center">
-						<div class="college-icon mb-3">
-							<i class="fas fa-university fa-3x text-info"></i>
-						</div>
-						<h5 class="card-title">Jodhpur Rural College</h5>
-						<p class="card-text">Arts and Social Sciences</p>
-						<div class="course-list mb-2">
-							<span class="badge bg-info me-1">B.A.</span>
-							<span class="badge bg-info me-1">M.A.</span>
-							<span class="badge bg-info me-1">B.Ed</span>
-						</div>
-						<div class="stats mb-3">
-							<small class="text-muted d-block"><i class="fas fa-users"></i> 1,500+ Students</small>
-							<small class="text-muted d-block"><i class="fas fa-chalkboard-teacher"></i> 55 Teachers</small>
-						</div>
-						<a href="college-details.html?college=jodhpur" class="btn btn-info">View Details</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class="col-lg-4 col-md-6">
-				<div class="card h-100 shadow-sm border-0">
-					<div class="card-body text-center">
-						<div class="college-icon mb-3">
-							<i class="fas fa-university fa-3x text-danger"></i>
-						</div>
-						<h5 class="card-title">Kota Engineering College</h5>
-						<p class="card-text">Engineering and Technology</p>
-						<div class="course-list mb-2">
-							<span class="badge bg-danger me-1">B.Tech CSE</span>
-							<span class="badge bg-danger me-1">B.Tech ECE</span>
-							<span class="badge bg-danger me-1">B.Tech ME</span>
-						</div>
-						<div class="stats mb-3">
-							<small class="text-muted d-block"><i class="fas fa-users"></i> 2,200+ Students</small>
-							<small class="text-muted d-block"><i class="fas fa-chalkboard-teacher"></i> 75 Teachers</small>
-						</div>
-						<a href="college-details.html?college=kota" class="btn btn-danger">View Details</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class="col-lg-4 col-md-6">
-				<div class="card h-100 shadow-sm border-0">
-					<div class="card-body text-center">
-						<div class="college-icon mb-3">
-							<i class="fas fa-university fa-3x text-secondary"></i>
-						</div>
-						<h5 class="card-title">Ajmer Medical College</h5>
-						<p class="card-text">Medical and Health Sciences</p>
-						<div class="course-list mb-2">
-							<span class="badge bg-secondary me-1">MBBS</span>
-							<span class="badge bg-secondary me-1">B.Sc Nursing</span>
-							<span class="badge bg-secondary me-1">Pharmacy</span>
-						</div>
-						<div class="stats mb-3">
-							<small class="text-muted d-block"><i class="fas fa-users"></i> 800+ Students</small>
-							<small class="text-muted d-block"><i class="fas fa-chalkboard-teacher"></i> 95 Teachers</small>
-						</div>
-						<a href="college-details.html?college=ajmer" class="btn btn-secondary">View Details</a>
 					</div>
 				</div>
 			</div>
@@ -360,7 +347,7 @@
 						<div class="course-details mb-3">
 							<small class="text-muted"><i class="fas fa-clock"></i> 4 Years | <i class="fas fa-certificate"></i> B.Tech/BCA</small>
 						</div>
-						<a href="subjects/computer_courses.html" class="btn btn-primary">View Course</a>
+						<a href="course-details.html?course=computer-science" class="btn btn-primary">View Course</a>
 					</div>
 				</div>
 			</div>
@@ -376,7 +363,7 @@
 						<div class="course-details mb-3">
 							<small class="text-muted"><i class="fas fa-clock"></i> 4 Years | <i class="fas fa-certificate"></i> B.Sc Agriculture</small>
 						</div>
-						<a href="subjects/agriculture.html" class="btn btn-success">View Course</a>
+						<a href="course-details.html?course=agriculture" class="btn btn-success">View Course</a>
 					</div>
 				</div>
 			</div>
@@ -392,7 +379,7 @@
 						<div class="course-details mb-3">
 							<small class="text-muted"><i class="fas fa-clock"></i> 3 Years | <i class="fas fa-certificate"></i> B.Com/BBA</small>
 						</div>
-						<a href="subjects/commerce.html" class="btn btn-warning">View Course</a>
+						<a href="course-details.html?course=commerce" class="btn btn-warning">View Course</a>
 					</div>
 				</div>
 			</div>
@@ -408,7 +395,7 @@
 						<div class="course-details mb-3">
 							<small class="text-muted"><i class="fas fa-clock"></i> 3 Years | <i class="fas fa-certificate"></i> B.Sc/M.Sc</small>
 						</div>
-						<a href="subjects/science.html" class="btn btn-info">View Course</a>
+						<a href="course-details.html?course=science" class="btn btn-info">View Course</a>
 					</div>
 				</div>
 			</div>
@@ -426,7 +413,7 @@
 		
 		<div class="row g-4">
 			<div class="col-lg-3 col-md-6">
-				<a href="services/live-classes.html" class="text-decoration-none">
+				<a href="start-live-class.html" class="text-decoration-none">
 					<div class="service-card card bg-transparent border-light text-white h-100">
 						<div class="card-body text-center p-4">
 							<i class="fas fa-video fa-3x mb-3 text-warning"></i>
@@ -450,24 +437,24 @@
 			</div>
 			
 			<div class="col-lg-3 col-md-6">
-				<a href="services/digital-library.html" class="text-decoration-none">
+				<a href="search-internships.html" class="text-decoration-none">
 					<div class="service-card card bg-transparent border-light text-white h-100">
 						<div class="card-body text-center p-4">
-							<i class="fas fa-book-open fa-3x mb-3 text-success"></i>
-							<h5 class="card-title">Digital Library</h5>
-							<p class="card-text">Thousands of books and resources</p>
+							<i class="fas fa-briefcase fa-3x mb-3 text-success"></i>
+							<h5 class="card-title">Internships</h5>
+							<p class="card-text">Find internships with top companies</p>
 						</div>
 					</div>
 				</a>
 			</div>
 			
 			<div class="col-lg-3 col-md-6">
-				<a href="services/mentorship.html" class="text-decoration-none">
+				<a href="discussion-center.html" class="text-decoration-none">
 					<div class="service-card card bg-transparent border-light text-white h-100">
 						<div class="card-body text-center p-4">
-							<i class="fas fa-users fa-3x mb-3 text-info"></i>
-							<h5 class="card-title">Mentorship</h5>
-							<p class="card-text">Guidance from experienced teachers</p>
+							<i class="fas fa-comments fa-3x mb-3 text-info"></i>
+							<h5 class="card-title">Discussion Center</h5>
+							<p class="card-text">Ask doubts and get instant answers</p>
 						</div>
 					</div>
 				</a>
@@ -596,9 +583,100 @@
 	</div>
 </footer>
 
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header bg-primary text-white">
+				<h5 class="modal-title"><i class="fas fa-sign-in-alt"></i> Login</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<form id="loginForm">
+					<div class="mb-3">
+						<label class="form-label">Email</label>
+						<input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Password</label>
+						<input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
+					</div>
+					<div class="mb-3">
+						<select class="form-control" id="userType" required>
+							<option value="">Select user type</option>
+							<option value="student">Student</option>
+							<option value="teacher">Teacher</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-primary w-100">Login</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
+function showLoginModal() {
+	new bootstrap.Modal(document.getElementById('loginModal')).show();
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+	e.preventDefault();
+	const email = document.getElementById('loginEmail').value;
+	const password = document.getElementById('loginPassword').value;
+	const userType = document.getElementById('userType').value;
+	
+	if (email && password && userType) {
+		const userData = { email: email, userType: userType };
+		localStorage.setItem('currentUser', JSON.stringify(userData));
+		
+		document.getElementById('login-btn').style.display = 'none';
+		document.getElementById('user-menu').style.display = 'block';
+		document.getElementById('user-menu').innerHTML = `
+			<div class="dropdown">
+				<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+					<i class="fas fa-user"></i> ${email}
+				</button>
+				<ul class="dropdown-menu">
+					<li><span class="dropdown-item-text">${userType}</span></li>
+					<li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+				</ul>
+			</div>
+		`;
+		
+		bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+		alert('Login successful!');
+	}
+});
+
+function logout() {
+	localStorage.removeItem('currentUser');
+	document.getElementById('login-btn').style.display = 'block';
+	document.getElementById('user-menu').style.display = 'none';
+}
+
+window.addEventListener('load', function() {
+	const currentUser = localStorage.getItem('currentUser');
+	if (currentUser) {
+		const userData = JSON.parse(currentUser);
+		document.getElementById('login-btn').style.display = 'none';
+		document.getElementById('user-menu').style.display = 'block';
+		document.getElementById('user-menu').innerHTML = `
+			<div class="dropdown">
+				<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+					<i class="fas fa-user"></i> ${userData.email}
+				</button>
+				<ul class="dropdown-menu">
+					<li><span class="dropdown-item-text">${userData.userType}</span></li>
+					<li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+				</ul>
+			</div>
+		`;
+	}
+});
+
+// Smooth scrolling
 $(document).ready(function() {
-	// Smooth scrolling for navigation links
 	$('a[href^="#"]').on('click', function(event) {
 		var target = $(this.getAttribute('href'));
 		if( target.length ) {
@@ -608,41 +686,7 @@ $(document).ready(function() {
 			}, 1000);
 		}
 	});
-	
-	// Navbar scroll effect
-	$(window).scroll(function() {
-		if ($(window).scrollTop() > 50) {
-			$('.navbar').addClass('scrolled');
-		} else {
-			$('.navbar').removeClass('scrolled');
-		}
-	});
 });
-</script>
-
-<!-- Include Login Modal -->
-<div id="login-modals"></div>
-
-<script>
-// Load login modal
-fetch('login-modal.html')
-    .then(response => response.text())
-    .then(html => {
-        document.getElementById('login-modals').innerHTML = html;
-    });
-
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-                console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
-}
 </script>
 
 </body>
