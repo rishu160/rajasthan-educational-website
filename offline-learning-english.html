@@ -3,392 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Learning - Rajasthan Digital Education</title>
+    <title>Offline Learning - Video Downloads | Rajasthan Digital Education</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .offline-card { border-left: 4px solid #28a745; }
-        .online-card { border-left: 4px solid #007bff; }
-        .storage-bar { height: 10px; border-radius: 5px; }
-        .lecture-item { cursor: pointer; transition: all 0.3s; }
-        .lecture-item:hover { background: #f8f9fa; }
-        .download-progress { display: none; }
+        .video-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            background: linear-gradient(135deg, #218838, #1ea080);
+            transform: scale(1.05);
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .video-thumbnail {
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+        }
     </style>
 </head>
 <body>
 
+<!-- Header -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="index.html">
-            <i class="fas fa-arrow-left me-2"></i>Rajasthan Digital Education
+            <i class="fas fa-graduation-cap text-primary me-2"></i>
+            <span class="fw-bold text-primary">Rajasthan Digital Education</span>
         </a>
-        <div class="navbar-nav ms-auto">
-            <span class="nav-link" id="connection-status">
-                <i class="fas fa-wifi text-success"></i> Online
-            </span>
-        </div>
+        <a href="index.html" class="btn btn-outline-primary">
+            <i class="fas fa-home me-1"></i>Back to Home
+        </a>
     </div>
 </nav>
 
-<section class="py-4" style="margin-top: 60px;">
-    <div class="container">
-        <!-- Connection Status & Storage Info -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card offline-card">
-                    <div class="card-body">
-                        <h5><i class="fas fa-download me-2"></i>Offline Content</h5>
-                        <p class="mb-1">Downloaded Lectures: <span id="offline-count">0</span></p>
-                        <p class="mb-0">Total Size: <span id="offline-size">0 MB</span></p>
-                    </div>
+<!-- Main Content -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-primary mb-1">
+                        <i class="fas fa-download me-2"></i>Offline Learning - Video Downloads
+                    </h2>
+                    <p class="text-muted">Download lectures for offline study. Perfect for areas with limited internet connectivity.</p>
+                </div>
+                <div class="text-end">
+                    <small class="text-success">
+                        <i class="fas fa-wifi me-1"></i>Total Downloads: 1,247
+                    </small>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card online-card">
-                    <div class="card-body">
-                        <h5><i class="fas fa-cloud me-2"></i>Storage Status</h5>
-                        <div class="storage-bar bg-light mb-2">
-                            <div class="bg-primary h-100" id="storage-used" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <select class="form-select" id="subjectFilter">
+                <option value="">All Subjects</option>
+                <option value="computer-science">Computer Science</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="physics">Physics</option>
+                <option value="chemistry">Chemistry</option>
+                <option value="english">English</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <select class="form-select" id="qualityFilter">
+                <option value="">All Quality</option>
+                <option value="720p">720p HD</option>
+                <option value="480p">480p</option>
+                <option value="360p">360p (Low Data)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="row" id="videoGrid">
+        <!-- Computer Science Videos -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-code fa-3x mb-2"></i>
+                        <h5>Data Structures</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Introduction to Data Structures</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Prof. Rajesh Kumar<br>
+                        <i class="fas fa-clock me-1"></i>45 minutes<br>
+                        <i class="fas fa-download me-1"></i>156 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">Computer Science</span>
+                        <span class="badge bg-success">720p HD</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('data-structures', this)">
+                            <i class="fas fa-download me-2"></i>Download (125 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
                         </div>
-                        <p class="mb-0"><span id="storage-info">Loading...</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Auto-Download Settings -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-cog me-2"></i>Auto-Download Settings</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="auto-download" checked>
-                            <label class="form-check-label" for="auto-download">
-                                Auto-download missed classes
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="wifi-only" checked>
-                            <label class="form-check-label" for="wifi-only">
-                                Download only on WiFi
-                            </label>
-                        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-database fa-3x mb-2"></i>
+                        <h5>Database Systems</h5>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <label class="form-label">Video Quality (to save data)</label>
-                    <select class="form-select" id="video-quality">
-                        <option value="low">Low (5-10 MB) - For Jio Phone</option>
-                        <option value="medium" selected>Medium (15-25 MB)</option>
-                        <option value="high">High (30-50 MB)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Available for Download -->
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5><i class="fas fa-cloud-download-alt me-2"></i>Available for Download</h5>
-                <button class="btn btn-sm btn-primary" onclick="refreshAvailableContent()">
-                    <i class="fas fa-refresh"></i> Refresh
-                </button>
-            </div>
-            <div class="card-body">
-                <div id="available-content">
-                    <div class="text-center py-4">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2">Loading content...</p>
+                <div class="card-body">
+                    <h6 class="card-title">SQL Fundamentals</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Dr. Priya Sharma<br>
+                        <i class="fas fa-clock me-1"></i>38 minutes<br>
+                        <i class="fas fa-download me-1"></i>203 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">Computer Science</span>
+                        <span class="badge bg-warning">480p</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('sql-fundamentals', this)">
+                            <i class="fas fa-download me-2"></i>Download (89 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Downloaded Content -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5><i class="fas fa-mobile-alt me-2"></i>Downloaded Content</h5>
-                <button class="btn btn-sm btn-danger" onclick="cleanOldContent()">
-                    <i class="fas fa-trash"></i> Clean Old Content
-                </button>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-calculator fa-3x mb-2"></i>
+                        <h5>Mathematics</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Calculus - Derivatives</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Prof. Amit Singh<br>
+                        <i class="fas fa-clock me-1"></i>52 minutes<br>
+                        <i class="fas fa-download me-1"></i>178 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-info">Mathematics</span>
+                        <span class="badge bg-success">720p HD</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('calculus-derivatives', this)">
+                            <i class="fas fa-download me-2"></i>Download (142 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div id="downloaded-content">
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-download fa-3x mb-3"></i>
-                        <p>No offline content found</p>
-                        <p>Download lectures from above</p>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-atom fa-3x mb-2"></i>
+                        <h5>Physics</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Quantum Mechanics Basics</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Dr. Neha Gupta<br>
+                        <i class="fas fa-clock me-1"></i>41 minutes<br>
+                        <i class="fas fa-download me-1"></i>134 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-danger">Physics</span>
+                        <span class="badge bg-warning">480p</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('quantum-mechanics', this)">
+                            <i class="fas fa-download me-2"></i>Download (95 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-flask fa-3x mb-2"></i>
+                        <h5>Chemistry</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Organic Chemistry - Reactions</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Prof. Suresh Patel<br>
+                        <i class="fas fa-clock me-1"></i>47 minutes<br>
+                        <i class="fas fa-download me-1"></i>189 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-warning">Chemistry</span>
+                        <span class="badge bg-success">720p HD</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('organic-chemistry', this)">
+                            <i class="fas fa-download me-2"></i>Download (128 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card video-card h-100">
+                <div class="video-thumbnail d-flex align-items-center justify-content-center text-white">
+                    <div class="text-center">
+                        <i class="fas fa-language fa-3x mb-2"></i>
+                        <h5>English</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Grammar & Communication</h6>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user me-1"></i>Ms. Kavita Joshi<br>
+                        <i class="fas fa-clock me-1"></i>35 minutes<br>
+                        <i class="fas fa-download me-1"></i>267 downloads
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-secondary">English</span>
+                        <span class="badge bg-info">360p</span>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn download-btn text-white w-100" onclick="downloadVideo('english-grammar', this)">
+                            <i class="fas fa-download me-2"></i>Download (67 MB)
+                        </button>
+                        <div class="progress mt-2" style="height: 4px; display: none;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- Download Progress Modal -->
-<div class="modal fade" id="downloadModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Downloading...</h5>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between">
-                        <span id="download-title">Lecture downloading</span>
-                        <span id="download-percent">0%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" id="download-progress" style="width: 0%"></div>
+    <!-- Download Stats -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>Download Statistics
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h4 class="text-primary">1,247</h4>
+                            <small class="text-muted">Total Downloads</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="text-success">156</h4>
+                            <small class="text-muted">Active Students</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="text-info">24</h4>
+                            <small class="text-muted">Available Courses</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="text-warning">4.8 GB</h4>
+                            <small class="text-muted">Total Content</small>
+                        </div>
                     </div>
                 </div>
-                <p class="text-muted mb-0">Please wait, this may take a few minutes...</p>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/offline-sync.js"></script>
 <script>
-// Offline Learning Page Controller
-class OfflineLearningPage {
-    constructor() {
-        this.init();
-    }
-
-    async init() {
-        await this.updateConnectionStatus();
-        await this.updateStorageInfo();
-        await this.loadAvailableContent();
-        await this.loadDownloadedContent();
-        this.setupEventListeners();
+function downloadVideo(videoId, button) {
+    const progressContainer = button.parentElement.querySelector('.progress');
+    const progressBar = progressContainer.querySelector('.progress-bar');
+    
+    // Show progress bar
+    progressContainer.style.display = 'block';
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Downloading...';
+    
+    // Simulate download progress
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 100) progress = 100;
         
-        // Update every 30 seconds
-        setInterval(() => {
-            this.updateConnectionStatus();
-            this.updateStorageInfo();
-        }, 30000);
-    }
-
-    setupEventListeners() {
-        // Connection status updates
-        window.addEventListener('online', () => this.updateConnectionStatus());
-        window.addEventListener('offline', () => this.updateConnectionStatus());
+        progressBar.style.width = progress + '%';
         
-        // Auto-download settings
-        document.getElementById('auto-download').addEventListener('change', (e) => {
-            localStorage.setItem('autoDownload', e.target.checked);
-        });
-        
-        document.getElementById('wifi-only').addEventListener('change', (e) => {
-            localStorage.setItem('wifiOnly', e.target.checked);
-        });
-        
-        document.getElementById('video-quality').addEventListener('change', (e) => {
-            localStorage.setItem('videoQuality', e.target.value);
-        });
-    }
-
-    updateConnectionStatus() {
-        const statusEl = document.getElementById('connection-status');
-        if (navigator.onLine) {
-            statusEl.innerHTML = '<i class="fas fa-wifi text-success"></i> Online';
-        } else {
-            statusEl.innerHTML = '<i class="fas fa-wifi-slash text-danger"></i> Offline';
+        if (progress >= 100) {
+            clearInterval(interval);
+            button.innerHTML = '<i class="fas fa-check me-2"></i>Downloaded';
+            button.classList.remove('download-btn');
+            button.classList.add('btn-success');
+            
+            // Show success message
+            setTimeout(() => {
+                alert('Video downloaded successfully! You can now access it offline.');
+                button.innerHTML = '<i class="fas fa-play me-2"></i>Play Offline';
+                button.onclick = () => playOfflineVideo(videoId, button);
+            }, 500);
         }
-    }
+    }, 200);
+}
 
-    async updateStorageInfo() {
-        try {
-            const usage = await offlineSync.getStorageUsage();
-            if (usage) {
-                const usedPercent = (usage.used / usage.available) * 100;
-                document.getElementById('storage-used').style.width = usedPercent + '%';
-                document.getElementById('storage-info').textContent = 
-                    `${usage.usedMB} MB / ${usage.availableMB} MB used`;
-            }
-            
-            // Update offline content stats
-            const lectures = await offlineSync.getOfflineLectures();
-            document.getElementById('offline-count').textContent = lectures.length;
-            
-            const totalSize = lectures.reduce((sum, lecture) => sum + (lecture.size || 0), 0);
-            document.getElementById('offline-size').textContent = Math.round(totalSize / 1024 / 1024) + ' MB';
-            
-        } catch (error) {
-            console.error('Error updating storage info:', error);
-        }
-    }
+// Filter functionality
+document.getElementById('subjectFilter').addEventListener('change', filterVideos);
+document.getElementById('qualityFilter').addEventListener('change', filterVideos);
 
-    async loadAvailableContent() {
-        const container = document.getElementById('available-content');
-        
-        if (!navigator.onLine) {
-            container.innerHTML = `
-                <div class="text-center py-4 text-muted">
-                    <i class="fas fa-wifi-slash fa-3x mb-3"></i>
-                    <p>Internet connection required to see new content</p>
+function playOfflineVideo(videoId, button) {
+    // Create video player modal
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.id = 'videoPlayerModal';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-play-circle me-2"></i>Offline Video Player
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            `;
-            return;
-        }
-
-        try {
-            // Mock data - replace with actual API call
-            const availableContent = [
-                {
-                    id: 'lec001',
-                    title: 'Computer Science - Data Structures',
-                    course: 'B.Tech CSE',
-                    duration: '45 minutes',
-                    size: '15 MB',
-                    date: '2024-01-15'
-                },
-                {
-                    id: 'lec002', 
-                    title: 'Mathematics - Calculus Basics',
-                    course: 'B.Sc Math',
-                    duration: '50 minutes',
-                    size: '18 MB',
-                    date: '2024-01-14'
-                },
-                {
-                    id: 'lec003',
-                    title: 'Agriculture Science - Crop Management',
-                    course: 'B.Sc Agriculture',
-                    duration: '40 minutes',
-                    size: '12 MB',
-                    date: '2024-01-13'
-                }
-            ];
-
-            container.innerHTML = availableContent.map(content => `
-                <div class="lecture-item border rounded p-3 mb-2" onclick="downloadLecture('${content.id}')">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1">${content.title}</h6>
-                            <p class="text-muted mb-1">${content.course} • ${content.duration}</p>
-                            <small class="text-muted">${content.date}</small>
+                <div class="modal-body p-0">
+                    <div class="video-player-container" style="background: #000; position: relative; height: 500px;">
+                        <div class="d-flex align-items-center justify-content-center h-100 text-white">
+                            <div class="text-center">
+                                <i class="fas fa-play-circle fa-5x mb-3 text-primary"></i>
+                                <h4>Playing: ${getVideoTitle(videoId)}</h4>
+                                <p class="text-muted">Offline Video - No Internet Required</p>
+                                <div class="video-controls mt-4">
+                                    <button class="btn btn-primary me-2" onclick="controlVideo('play')">
+                                        <i class="fas fa-play"></i> Play
+                                    </button>
+                                    <button class="btn btn-secondary me-2" onclick="controlVideo('pause')">
+                                        <i class="fas fa-pause"></i> Pause
+                                    </button>
+                                    <button class="btn btn-info me-2" onclick="controlVideo('rewind')">
+                                        <i class="fas fa-backward"></i> -10s
+                                    </button>
+                                    <button class="btn btn-info" onclick="controlVideo('forward')">
+                                        <i class="fas fa-forward"></i> +10s
+                                    </button>
+                                </div>
+                                <div class="progress mt-3" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" id="videoProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2 small text-muted">
+                                    <span id="currentTime">00:00</span>
+                                    <span id="totalTime">45:30</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-end">
-                            <span class="badge bg-info">${content.size}</span>
-                            <br>
-                            <button class="btn btn-sm btn-success mt-1">
-                                <i class="fas fa-download"></i> Download
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between w-100">
+                        <div>
+                            <span class="badge bg-success me-2">
+                                <i class="fas fa-wifi-slash me-1"></i>Offline Mode
+                            </span>
+                            <span class="badge bg-info">
+                                <i class="fas fa-download me-1"></i>Downloaded
+                            </span>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-primary me-2" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i> Fullscreen
                             </button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    
+    // Remove modal when closed
+    modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+    });
+    
+    // Start video simulation
+    startVideoSimulation();
+}
 
-        } catch (error) {
-            container.innerHTML = `
-                <div class="alert alert-danger">
-                    Error loading content: ${error.message}
-                </div>
-            `;
-        }
-    }
+function getVideoTitle(videoId) {
+    const titles = {
+        'data-structures': 'Introduction to Data Structures',
+        'sql-fundamentals': 'SQL Fundamentals',
+        'calculus-derivatives': 'Calculus - Derivatives',
+        'quantum-mechanics': 'Quantum Mechanics Basics',
+        'organic-chemistry': 'Organic Chemistry - Reactions',
+        'english-grammar': 'Grammar & Communication'
+    };
+    return titles[videoId] || 'Educational Video';
+}
 
-    async loadDownloadedContent() {
-        const container = document.getElementById('downloaded-content');
-        
-        try {
-            const lectures = await offlineSync.getOfflineLectures();
-            
-            if (lectures.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-4 text-muted">
-                        <i class="fas fa-download fa-3x mb-3"></i>
-                        <p>No offline content found</p>
-                        <p>Download lectures from above</p>
-                    </div>
-                `;
-                return;
+let videoInterval;
+let currentVideoTime = 0;
+let isPlaying = false;
+
+function controlVideo(action) {
+    const progressBar = document.getElementById('videoProgress');
+    const currentTimeEl = document.getElementById('currentTime');
+    
+    switch(action) {
+        case 'play':
+            if (!isPlaying) {
+                isPlaying = true;
+                videoInterval = setInterval(() => {
+                    currentVideoTime += 1;
+                    const progress = (currentVideoTime / 2730) * 100; // 45:30 = 2730 seconds
+                    progressBar.style.width = Math.min(progress, 100) + '%';
+                    currentTimeEl.textContent = formatTime(currentVideoTime);
+                    
+                    if (currentVideoTime >= 2730) {
+                        controlVideo('pause');
+                        alert('Video completed! 🎉');
+                    }
+                }, 1000);
             }
-
-            container.innerHTML = lectures.map(lecture => `
-                <div class="lecture-item border rounded p-3 mb-2" onclick="playOfflineLecture('${lecture.id}')">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1">
-                                ${lecture.title}
-                                ${lecture.watched ? '<i class="fas fa-check-circle text-success ms-1"></i>' : ''}
-                            </h6>
-                            <p class="text-muted mb-1">Duration: ${lecture.duration}</p>
-                            <small class="text-muted">Downloaded: ${new Date(lecture.downloadDate).toLocaleDateString()}</small>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge bg-secondary">${Math.round(lecture.size / 1024 / 1024)} MB</span>
-                            <br>
-                            <button class="btn btn-sm btn-primary mt-1">
-                                <i class="fas fa-play"></i> Play
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-        } catch (error) {
-            container.innerHTML = `
-                <div class="alert alert-danger">
-                    Error loading offline content: ${error.message}
-                </div>
-            `;
-        }
+            break;
+        case 'pause':
+            isPlaying = false;
+            clearInterval(videoInterval);
+            break;
+        case 'rewind':
+            currentVideoTime = Math.max(0, currentVideoTime - 10);
+            const rewindProgress = (currentVideoTime / 2730) * 100;
+            progressBar.style.width = rewindProgress + '%';
+            currentTimeEl.textContent = formatTime(currentVideoTime);
+            break;
+        case 'forward':
+            currentVideoTime = Math.min(2730, currentVideoTime + 10);
+            const forwardProgress = (currentVideoTime / 2730) * 100;
+            progressBar.style.width = forwardProgress + '%';
+            currentTimeEl.textContent = formatTime(currentVideoTime);
+            break;
     }
 }
 
-// Global functions
-window.downloadLecture = async function(lectureId) {
-    const modal = new bootstrap.Modal(document.getElementById('downloadModal'));
-    modal.show();
-    
-    // Mock download process
-    const progressBar = document.getElementById('download-progress');
-    const progressText = document.getElementById('download-percent');
-    
-    for (let i = 0; i <= 100; i += 10) {
-        progressBar.style.width = i + '%';
-        progressText.textContent = i + '%';
-        await new Promise(resolve => setTimeout(resolve, 200));
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function toggleFullscreen() {
+    const container = document.querySelector('.video-player-container');
+    if (container.requestFullscreen) {
+        container.requestFullscreen();
     }
-    
-    modal.hide();
-    
-    // Simulate successful download
+}
+
+function startVideoSimulation() {
+    // Auto-start video after 1 second
     setTimeout(() => {
-        alert('Lecture downloaded successfully!');
-        // Reload downloaded content
-        offlinePage.loadDownloadedContent();
-        offlinePage.updateStorageInfo();
-    }, 500);
-};
+        controlVideo('play');
+    }, 1000);
+}
 
-window.playOfflineLecture = function(lectureId) {
-    alert('Playing offline lecture: ' + lectureId);
-};
-
-window.refreshAvailableContent = function() {
-    offlinePage.loadAvailableContent();
-};
-
-window.cleanOldContent = async function() {
-    if (confirm('Delete content older than 30 days?')) {
-        alert('Old content cleaned successfully');
-        offlinePage.loadDownloadedContent();
-        offlinePage.updateStorageInfo();
-    }
-};
-
-// Initialize page
-const offlinePage = new OfflineLearningPage();
+function filterVideos() {
+    const subjectFilter = document.getElementById('subjectFilter').value;
+    const qualityFilter = document.getElementById('qualityFilter').value;
+    const cards = document.querySelectorAll('.video-card');
+    
+    cards.forEach(card => {
+        const subject = card.querySelector('.badge').textContent.toLowerCase().replace(' ', '-');
+        const quality = card.querySelectorAll('.badge')[1].textContent.toLowerCase();
+        
+        let showCard = true;
+        
+        if (subjectFilter && !subject.includes(subjectFilter)) {
+            showCard = false;
+        }
+        
+        if (qualityFilter && !quality.includes(qualityFilter)) {
+            showCard = false;
+        }
+        
+        card.parentElement.style.display = showCard ? 'block' : 'none';
+    });
+}
 </script>
 
 </body>
