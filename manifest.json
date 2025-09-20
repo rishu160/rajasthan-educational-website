@@ -1,8 +1,8 @@
 {
   "name": "Rajasthan Digital Education",
-  "short_name": "RDE",
-  "description": "Government of Rajasthan Remote Classroom Platform for Rural Colleges",
-  "start_url": "/",
+  "short_name": "RajEdu",
+  "description": "Government of Rajasthan Remote Classroom Platform - Offline Learning Available",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#FF6B35",
   "theme_color": "#FF6B35",
@@ -11,12 +11,14 @@
     {
       "src": "images/icon/logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "images/icon/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["education", "government", "learning"],
