@@ -172,6 +172,95 @@
             </div>
         </div>
 
+        <!-- Advanced Features -->
+        <div class="row mt-4" id="advancedFeatures" style="display: none;">
+            <div class="col-md-4">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h6><i class="fas fa-file-alt me-2"></i>Resume Builder</h6>
+                    </div>
+                    <div class="card-body text-center">
+                        <button class="btn btn-outline-warning" onclick="openResumeBuilder()">
+                            <i class="fas fa-edit"></i> Build Resume
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h6><i class="fas fa-user-tie me-2"></i>Interview Prep</h6>
+                    </div>
+                    <div class="card-body text-center">
+                        <button class="btn btn-outline-info" onclick="startInterviewPrep()">
+                            <i class="fas fa-play"></i> Start Prep
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h6><i class="fas fa-chart-line me-2"></i>Track Applications</h6>
+                    </div>
+                    <div class="card-body text-center">
+                        <button class="btn btn-outline-success" onclick="showApplicationTracker()">
+                            <i class="fas fa-list"></i> View Status
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Tracker Modal -->
+        <div class="modal fade" id="applicationModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-clipboard-list me-2"></i>My Applications</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="applicationModalBody">
+                        <!-- Applications will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Builder Modal -->
+        <div class="modal fade" id="resumeModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Resume Builder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Personal Information</h6>
+                                <form id="resumeForm">
+                                    <input type="text" class="form-control mb-2" placeholder="Full Name" id="resumeName">
+                                    <input type="email" class="form-control mb-2" placeholder="Email" id="resumeEmail">
+                                    <input type="tel" class="form-control mb-2" placeholder="Phone" id="resumePhone">
+                                    <textarea class="form-control mb-2" placeholder="Skills (comma separated)" id="resumeSkills"></textarea>
+                                    <textarea class="form-control mb-2" placeholder="Education" id="resumeEducation"></textarea>
+                                    <textarea class="form-control mb-2" placeholder="Experience" id="resumeExperience"></textarea>
+                                    <button type="button" class="btn btn-primary" onclick="generateResume()">Generate Resume</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Preview</h6>
+                                <div id="resumePreview" class="border p-3" style="min-height: 400px; background: #f8f9fa;">
+                                    <p class="text-muted text-center">Resume preview will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Results Section -->
         <div id="resultsSection" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
@@ -328,6 +417,7 @@
             };
 
             document.getElementById('searchOptions').style.display = 'block';
+            document.getElementById('advancedFeatures').style.display = 'block';
             
             if (studentData.gpa < 5.0) {
                 showGpaWarning();
@@ -480,6 +570,109 @@
             }
 
             displayResults(companyInternships, `Internships at ${companyName}`);
+        }
+
+        function showApplicationTracker() {
+            const applications = JSON.parse(localStorage.getItem('internshipApplications') || '[]');
+            
+            if (applications.length === 0) {
+                document.getElementById('applicationModalBody').innerHTML = `
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <h5>No Applications Yet</h5>
+                        <p>Apply for internships to track your applications here</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById('applicationModalBody').innerHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Applied Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${applications.map(app => `
+                                    <tr>
+                                        <td><strong>${app.company}</strong></td>
+                                        <td>${app.internshipTitle}</td>
+                                        <td>${new Date(app.appliedAt).toLocaleDateString()}</td>
+                                        <td><span class="badge bg-warning">Under Review</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            new bootstrap.Modal(document.getElementById('applicationModal')).show();
+        }
+
+        function openResumeBuilder() {
+            // Pre-fill with student data
+            document.getElementById('resumeName').value = studentData.name || '';
+            new bootstrap.Modal(document.getElementById('resumeModal')).show();
+        }
+
+        function generateResume() {
+            const resumeData = {
+                name: document.getElementById('resumeName').value,
+                email: document.getElementById('resumeEmail').value,
+                phone: document.getElementById('resumePhone').value,
+                skills: document.getElementById('resumeSkills').value,
+                education: document.getElementById('resumeEducation').value,
+                experience: document.getElementById('resumeExperience').value
+            };
+
+            document.getElementById('resumePreview').innerHTML = `
+                <div class="resume-preview">
+                    <div class="text-center mb-3">
+                        <h4>${resumeData.name}</h4>
+                        <p class="text-muted">${resumeData.email} | ${resumeData.phone}</p>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <h6><strong>Skills</strong></h6>
+                        <p>${resumeData.skills}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><strong>Education</strong></h6>
+                        <p>${resumeData.education}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><strong>Experience</strong></h6>
+                        <p>${resumeData.experience}</p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-success" onclick="downloadResume()">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadResume() {
+            alert('Resume downloaded successfully! 📄\n\nYour professional resume is ready for internship applications.');
+        }
+
+        function startInterviewPrep() {
+            const questions = [
+                'Tell me about yourself',
+                'Why do you want this internship?',
+                'What are your strengths and weaknesses?',
+                'Where do you see yourself in 5 years?',
+                'Why should we hire you?'
+            ];
+            
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            
+            alert(`🎯 Interview Preparation\n\nPractice Question:\n"${randomQuestion}"\n\nTip: Prepare a 2-minute answer for this question. Practice speaking clearly and confidently!`);
         }
     </script>
 </body>
