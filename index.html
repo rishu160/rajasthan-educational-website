@@ -56,6 +56,46 @@
 		gap: 10px !important;
 	}
 	
+	/* Mobile Header Fix - Keep elements in one line */
+	.navbar-brand {
+		display: flex !important;
+		align-items: center !important;
+		flex-wrap: nowrap !important;
+		white-space: nowrap !important;
+	}
+	
+	.navbar-brand img {
+		flex-shrink: 0 !important;
+	}
+	
+	.navbar-brand span {
+		flex-shrink: 1 !important;
+		min-width: 0 !important;
+	}
+	
+	@media (max-width: 768px) {
+		.navbar-brand span {
+			font-size: 14px !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+		}
+		
+		.d-flex.align-items-center {
+			flex-wrap: nowrap !important;
+			gap: 5px !important;
+		}
+		
+		#theme-toggle {
+			padding: 4px !important;
+			font-size: 14px !important;
+		}
+		
+		.btn.dropdown-toggle {
+			padding: 4px 8px !important;
+			font-size: 12px !important;
+		}
+	}
+	
 	@media (max-width: 960px) {
 		nav ul, .srch, .get-started {
 			display: none !important;
