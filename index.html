@@ -107,6 +107,48 @@
 		font-weight: 900 !important;
 		font-size: 20px !important;
 	}
+	
+	/* Dark Mode Styles */
+	body.dark-mode {
+		background-color: #121212 !important;
+		color: #ffffff !important;
+	}
+	
+	body.dark-mode .navbar {
+		background-color: #1f1f1f !important;
+	}
+	
+	body.dark-mode .card {
+		background-color: #2d2d2d !important;
+		color: #ffffff !important;
+		border-color: #444 !important;
+	}
+	
+	body.dark-mode .bg-light {
+		background-color: #1a1a1a !important;
+	}
+	
+	body.dark-mode .text-primary {
+		color: #ffa500 !important;
+	}
+	
+	body.dark-mode .bg-white {
+		background-color: #1f1f1f !important;
+	}
+	
+	#theme-toggle {
+		border: none;
+		background: transparent;
+		font-size: 18px;
+		cursor: pointer;
+		padding: 8px;
+		border-radius: 50%;
+		transition: all 0.3s ease;
+	}
+	
+	#theme-toggle:hover {
+		background-color: rgba(0,0,0,0.1);
+	}
 	</style>
 	
 	<!-- Structured Data for SEO -->
@@ -143,6 +185,37 @@
 	<script type="text/javascript" src="js/voice-assistant.js"></script>
 	<script type="text/javascript" src="js/search.js"></script>
 	<script type="text/javascript" src="js/chatbot-init.js"></script>
+	
+	<script>
+	// Dark/Light Mode Toggle
+	function toggleTheme() {
+		const body = document.body;
+		const themeIcon = document.getElementById('theme-icon');
+		
+		if (body.classList.contains('dark-mode')) {
+			// Switch to light mode
+			body.classList.remove('dark-mode');
+			themeIcon.className = 'fas fa-moon';
+			localStorage.setItem('theme', 'light');
+		} else {
+			// Switch to dark mode
+			body.classList.add('dark-mode');
+			themeIcon.className = 'fas fa-sun';
+			localStorage.setItem('theme', 'dark');
+		}
+	}
+	
+	// Load saved theme on page load
+	document.addEventListener('DOMContentLoaded', function() {
+		const savedTheme = localStorage.getItem('theme');
+		const themeIcon = document.getElementById('theme-icon');
+		
+		if (savedTheme === 'dark') {
+			document.body.classList.add('dark-mode');
+			themeIcon.className = 'fas fa-sun';
+		}
+	});
+	</script>
 
 </head>
 <body>
@@ -183,6 +256,9 @@
 			</ul>
 			
 			<div class="d-flex align-items-center gap-2">
+				<button id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+					<i class="fas fa-moon" id="theme-icon"></i>
+				</button>
 				<div class="dropdown">
 					<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 						<i class="fas fa-plus me-1"></i>Quick Actions
@@ -560,9 +636,9 @@
 			<div class="col-lg-3 mb-4">
 				<h6 class="fw-bold mb-3">Support</h6>
 				<ul class="list-unstyled">
-					<li><a href="#" class="text-white-50">Technical Support</a></li>
-					<li><a href="#" class="text-white-50">Policies</a></li>
-					<li><a href="#" class="text-white-50">Privacy</a></li>
+					<li><a href="#contact" class="text-white-50">Technical Support</a></li>
+					<li><a href="privacy-policy.html" class="text-white-50">Privacy Policy</a></li>
+					<li><a href="#" class="text-white-50">Terms of Service</a></li>
 					<li><a href="#" class="text-white-50">FAQ</a></li>
 				</ul>
 			</div>
