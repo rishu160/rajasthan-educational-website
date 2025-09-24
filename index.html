@@ -107,72 +107,50 @@
 		order: 3 !important;
 	}
 	
-	/* ULTRA MOBILE FORCE ROW LAYOUT */
-	@media (max-width: 768px) {
-		/* Force everything in one row */
-		.navbar .container > * {
-			display: inline-flex !important;
-			flex-direction: row !important;
-			vertical-align: middle !important;
-			float: none !important;
+	/* Mobile Horizontal Menu */
+	.mobile-horizontal-menu {
+		display: flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		gap: 4px !important;
+	}
+	
+	@media (max-width: 991.98px) {
+		/* Show mobile menu, hide desktop menu */
+		.mobile-horizontal-menu {
+			display: flex !important;
 		}
 		
 		.navbar-brand {
-			order: 1 !important;
-			flex: 0 1 auto !important;
-			max-width: 50% !important;
-			display: inline-flex !important;
+			flex: 1 !important;
+			max-width: 60% !important;
 		}
 		
 		.navbar-brand span {
-			font-size: 10px !important;
+			font-size: 12px !important;
 			white-space: nowrap !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
 		}
 		
 		.navbar-brand img {
-			height: 20px !important;
-			width: auto !important;
-		}
-		
-		.navbar-collapse {
-			order: 2 !important;
-			flex: 0 0 auto !important;
-			display: inline-flex !important;
-			position: static !important;
-			width: auto !important;
-		}
-		
-		.navbar-nav {
-			display: none !important;
-		}
-		
-		.d-flex.align-items-center {
-			display: inline-flex !important;
-			flex-wrap: nowrap !important;
-			gap: 2px !important;
-			flex-shrink: 0 !important;
-		}
-		
-		#theme-toggle {
-			padding: 2px !important;
-			font-size: 10px !important;
-			min-width: 25px !important;
 			height: 25px !important;
 		}
 		
-		.btn.dropdown-toggle {
-			padding: 2px 4px !important;
-			font-size: 8px !important;
-			min-width: auto !important;
-			white-space: nowrap !important;
-		}
-		
-		.dropdown-toggle .me-1, .dropdown-toggle i {
+		.navbar-toggler {
 			display: none !important;
 		}
 		
-		/* Hide hamburger completely */
-		.navbar-toggler {
+		.btn-sm {
+			padding: 4px 8px !important;
+			font-size: 11px !important;
+		}
+	}
+	
+	@media (min-width: 992px) {
+		/* Hide mobile menu, show desktop menu */
+		.mobile-horizontal-menu {
 			display: none !important;
 		}
 	}
@@ -367,7 +345,30 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		
-		<div class="collapse navbar-collapse" id="navbarNav">
+		<!-- Mobile Horizontal Menu -->
+		<div class="mobile-horizontal-menu d-flex align-items-center justify-content-end flex-nowrap">
+			<button id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode" class="btn btn-sm me-1">
+				<i class="fas fa-moon" id="theme-icon"></i>
+			</button>
+			<div class="dropdown me-1">
+				<button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+					Actions
+				</button>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="offline-learning-english.html">Offline Learning</a></li>
+					<li><a class="dropdown-item" href="search-internships.html">Internships</a></li>
+					<li><a class="dropdown-item" href="start-live-class.html">Live Class</a></li>
+				</ul>
+			</div>
+			<div id="user-menu" style="display: none;"></div>
+			<a id="login-btn" class="btn btn-primary btn-sm me-1" href="#" onclick="showLoginModal()">Login</a>
+			<a href="mobile-app.html" class="btn btn-success btn-sm">
+				App
+			</a>
+		</div>
+		
+		<!-- Desktop Menu (Hidden on Mobile) -->
+		<div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
 			<ul class="navbar-nav mx-auto">
 				<li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="#colleges">Colleges</a></li>
@@ -377,8 +378,8 @@
 			</ul>
 			
 			<div class="d-flex align-items-center gap-2">
-				<button id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-					<i class="fas fa-moon" id="theme-icon"></i>
+				<button id="theme-toggle-desktop" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+					<i class="fas fa-moon" id="theme-icon-desktop"></i>
 				</button>
 				<div class="dropdown">
 					<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -398,8 +399,8 @@
 						<li><a class="dropdown-item" href="college-contact.html"><i class="fas fa-phone me-2"></i>Contact College</a></li>
 					</ul>
 				</div>
-				<div id="user-menu" style="display: none;"></div>
-				<a id="login-btn" class="btn btn-primary" href="#" onclick="showLoginModal()">Login</a>
+				<div id="user-menu-desktop" style="display: none;"></div>
+				<a id="login-btn-desktop" class="btn btn-primary" href="#" onclick="showLoginModal()">Login</a>
 				<a href="mobile-app.html" class="btn btn-success">
 					<i class="fas fa-mobile-alt"></i> App
 				</a>
